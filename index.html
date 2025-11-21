@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr" class="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boîte à Outils de Communication</title>
+    <meta name="description" content="Outil d'analyse et d'aide à la communication interpersonnelle.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/modules.css">
+    <link rel="stylesheet" href="assets/css/modal.css">
+    <link rel="stylesheet" href="assets/css/accessibility-fixes.css">
+    <link rel="stylesheet" href="assets/css/ux-improvements.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Set "dark" theme by default
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('boite-outils-theme', 'dark');
+    </script>
+</head>
+
+<body
+    class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 font-inter antialiased">
+
+    <!-- Sidebar Navigation (Desktop) -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="flex items-center gap-3">
+                <div class="app-icon">
+                    <!-- ICON: Puzzle -->
+                    <i data-lucide="puzzle" class="w-6 h-6 text-white"></i>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-sm font-bold text-slate-900 dark:text-white">EgoCoach</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">v1.0</p>
+                </div>
+            </div>
+            <button id="sidebar-close" class="btn btn-ghost btn-icon btn-sm lg:hidden">
+                <i data-lucide="x" class="icon-sm"></i>
+            </button>
+        </div>
+
+        <!-- Navigation principale -->
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <p class="nav-section-title">PRINCIPAL</p>
+                <a href="#" class="nav-item active" data-page="home">
+                    <i data-lucide="layout-dashboard" class="nav-icon"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a href="#" class="nav-item" data-page="journal">
+                    <i data-lucide="book" class="nav-icon"></i>
+                    <span>Mon Journal</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <p class="nav-section-title">ANALYSER</p>
+                <a href="#" class="nav-item" data-page="analyzer-quick">
+                    <i data-lucide="zap" class="nav-icon"></i>
+                    <span>Analyse Rapide</span>
+                    <span class="nav-shortcut">⌘K</span>
+                </a>
+                <a href="#" class="nav-item" data-page="analyzer-manual">
+                    <i data-lucide="clipboard-list" class="nav-icon"></i>
+                    <span>Analyse Guidée</span>
+                </a>
+                <a href="#" class="nav-item" data-page="analyzer-ai">
+                    <i data-lucide="sparkles" class="nav-icon"></i>
+                    <span>Analyse IA</span>
+                    <span class="nav-badge badge-ai">AI</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <p class="nav-section-title">APPRENDRE</p>
+                <a href="#" class="nav-item" data-page="guide">
+                    <i data-lucide="book-open" class="nav-icon"></i>
+                    <span>Guide & Concepts</span>
+                </a>
+                <a href="#" class="nav-item" data-page="insights">
+                    <i data-lucide="lightbulb" class="nav-icon"></i>
+                    <span>Mes Insights</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Quick Actions -->
+        <div class="sidebar-footer">
+            <!-- User Simulation moved to Settings -->
+
+            <button class="btn btn-primary btn-md w-full justify-center mb-3" id="quick-analyze">
+                <i data-lucide="zap" class="icon-md"></i>
+                <span>Nouvelle analyse</span>
+            </button>
+
+            <div class="sidebar-settings">
+                <button id="theme-toggle" class="btn btn-secondary btn-icon btn-md" title="Changer le thème">
+                    <i id="theme-toggle-dark-icon" data-lucide="moon" class="icon-md hidden"></i>
+                    <i id="theme-toggle-light-icon" data-lucide="sun" class="icon-md hidden"></i>
+                </button>
+                <button class="btn btn-secondary btn-icon btn-md" id="settings-btn" title="Paramètres">
+                    <i data-lucide="settings" class="icon-md"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Navigation Toggle -->
+    <button id="sidebar-toggle" class="mobile-nav-toggle btn btn-ghost btn-icon btn-lg lg:hidden">
+        <i data-lucide="menu" class="icon-lg"></i>
+    </button>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="main-content">
+
+        <!-- Page Header avec Breadcrumb -->
+        <header class="page-header">
+            <div class="breadcrumb">
+                <span class="breadcrumb-item active" id="current-page-breadcrumb">Tableau de bord</span>
+            </div>
+
+            <div class="page-actions">
+                <button class="btn btn-ghost btn-icon btn-md" title="Rechercher (⌘K)">
+                    <i data-lucide="search" class="icon-md"></i>
+                </button>
+                <button class="btn btn-ghost btn-icon btn-md relative" title="Notifications">
+                    <i data-lucide="bell" class="icon-md"></i>
+                    <span class="notification-badge">2</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Content Container -->
+        <div class="content-wrapper">
+
+            <!-- Page: Tableau de bord -->
+            <section id="page-home" class="page-content">
+                <div id="home-root"></div>
+            </section>
+
+            <!-- Page: Journal -->
+            <section id="page-journal" class="page-content hidden">
+                <div id="journal-root"></div>
+            </section>
+
+            <!-- Page: Analyse Rapide (Nouveau) -->
+            <section id="page-analyzer-quick" class="page-content hidden">
+                <div id="quick-root"></div>
+            </section>
+
+            <!-- Page: Analyse Manuelle -->
+            <section id="page-analyzer-manual" class="page-content hidden">
+                <div id="manual-root"></div>
+            </section>
+
+            <!-- Page: Analyse IA -->
+            <section id="page-analyzer-ai" class="page-content hidden">
+                <div id="ai-root"></div>
+            </section>
+
+            <!-- Page: Guide -->
+            <section id="page-guide" class="page-content hidden">
+                <div id="guide-root"></div>
+            </section>
+
+            <!-- Page: Insights (Nouveau) -->
+            <section id="page-insights" class="page-content hidden">
+                <div id="insights-root"></div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="pause-modal" class="hidden"></div>
+    <div id="journal-modal" class="hidden"></div>
+    <div id="dojo-modal" class="hidden"></div>
+    <div id="gemini-modal" class="hidden"></div>
+    <div id="ollama-modal" class="hidden"></div>
+    <div id="settings-modal" class="hidden"></div>
+    <div id="onboarding-modal" class="hidden"></div>
+
+    <!-- Command Palette (⌘K) -->
+    <div id="command-palette" class="command-palette hidden">
+        <div class="command-palette-backdrop"></div>
+        <div class="command-palette-content">
+            <input type="text" id="command-input" placeholder="Rechercher ou exécuter une commande..."
+                class="command-input" />
+            <div id="command-results" class="command-results"></div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-root" class="toast-root" role="status" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- Floating Action Button (Mobile) -->
+    <button id="fab" class="fab lg:hidden">
+        <i data-lucide="plus" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Modules et Services -->
+    <!-- Core & Config -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/security.js"></script>
+    <script src="assets/js/qualityGuards.js"></script>
+    <script src="assets/js/iconSystem.js"></script>
+    <script src="assets/js/data-store.js"></script>
+
+    <!-- Shared Modules -->
+    <script src="assets/js/modules/ui.js"></script>
+    <script src="assets/js/modules/themeManager.js"></script>
+    <script src="assets/js/modules/encryption.js"></script>
+    <script src="assets/js/modules/notificationManager.js"></script>
+    <script src="assets/js/modules/navigationManager.js"></script>
+    <script src="assets/js/modules/commandPalette.js"></script>
+
+    <!-- Services -->
+    <script src="assets/js/modules/geminiService.js"></script>
+    <script src="assets/js/modules/ollamaService.js"></script>
+
+    <!-- Feature Modules -->
+    <script src="assets/js/modules/journalModule.js"></script>
+    <script src="assets/js/modules/homeModule.js"></script>
+    <script src="assets/js/modules/manualAnalyzer.js"></script>
+    <script src="assets/js/modules/quickAnalyzer.js"></script>
+    <script src="assets/js/modules/aiModule.js"></script>
+    <script src="assets/js/modules/dojoSimulator.js"></script>
+    <script src="assets/js/modules/guideModule.js"></script>
+    <script src="assets/js/modules/footerEnhancements.js"></script>
+
+    <!-- Phase 1: Psychological Frameworks Library -->
+    <script src="assets/js/modules/conceptLibrary.js"></script>
+    <script src="assets/js/modules/gottmanPatterns.js"></script>
+    <script src="assets/js/modules/couplePatterns.js"></script>
+    <script src="assets/js/modules/attachmentStyles.js"></script>
+
+    <!-- Main App Orchestration -->
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .hidden { display: none; }
+        button { margin: 5px; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Debug Navigation</h1>
+    <div id="status"></div>
+    
+    <div>
+        <button id="test-btn">Test Navigation</button>
+    </div>
+    
+    <div id="page-home" class="hidden">HOME CONTENT</div>
+    
+    <script src="assets/js/app.js"></script>
+    <script>
+        setTimeout(() => {
+            const status = document.getElementById('status');
+            status.innerHTML = '<h2>État du chargement:</h2>';
+            
+            if (window.app) {
+                status.innerHTML += '<p style="color: green;">✓ window.app est défini</p>';
+                status.innerHTML += '<p>navigateTo: ' + typeof window.app.navigateTo + '</p>';
+            } else {
+                status.innerHTML += '<p style="color: red;">✗ window.app N\'EST PAS défini</p>';
+            }
+            
+            const homeSection = document.getElementById('page-home');
+            if (homeSection) {
+                status.innerHTML += '<p>Section home: ' + (homeSection.classList.contains('hidden') ? 'CACHÉE' : 'VISIBLE') + '</p>';
+            }
+            
+            document.getElementById('test-btn').addEventListener('click', () => {
+                if (window.app && window.app.navigateTo) {
+                    window.app.navigateTo('home');
+                    status.innerHTML += '<p>Navigation appelée !</p>';
+                }
+            });
+        }, 500);
+    </script>
+</body>
+</html>

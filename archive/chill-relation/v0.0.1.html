@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyseur de Communication Multimodal</title>
+    
+    <!-- Chargement de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration de la police Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style pour le loader */
+        .loader {
+            border-top-color: #3498db;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .drop-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .drop-area.highlight {
+            border-color: #3B82F6;
+            background-color: #EFF6FF;
+        }
+        .thumbnail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .thumbnail {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .remove-thumbnail {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen antialiased">
+
+    <div class="max-w-3xl mx-auto p-4 md:p-8">
+        
+        <!-- En-tête -->
+        <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg shadow-lg p-6 md:p-8 mb-8">
+            <h1 class="text-3xl font-bold mb-2">Analyseur de Communication Stratégique Multimodal</h1>
+            <p class="text-blue-100">Un outil d'aide pour analyser les situations (texte et images) et préparer vos réponses.</p>
+        </header>
+
+        
+        <!-- Section de saisie -->
+        <main class="bg-white rounded-lg shadow-xl overflow-hidden">
+            <div class="p-6 md:p-8">
+                <label for="situationInput" class="block text-sm font-medium text-gray-700 mb-2">
+                    Message reçu ou description de la situation :
+                </label>
+                <textarea id="situationInput" rows="4" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" placeholder="Collez ici le message ou décrivez la situation..."></textarea>
+                
+                <div id="dropArea" class="drop-area mt-4 bg-gray-50 hover:bg-gray-100 transition">
+                    <p class="text-gray-500">Glissez & déposez des images ici, ou <span class="text-blue-600 font-medium">cliquez pour sélectionner</span></p>
+                    <!-- L'attribut 'multiple' ici permet la sélection de plusieurs fichiers -->
+                    <input type="file" id="fileInput" accept="image/*" multiple class="hidden">
+                </div>
+                <!-- Ce conteneur affichera toutes les vignettes des images uploadées -->
+                <div id="thumbnailContainer" class="thumbnail-container"></div>
+
+                <button id="analyzeButton" class="mt-6 w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 flex items-center justify-center">
+                    <span id="buttonText">Analyser la situation</span>
+                    
+                    <!-- Loader SVG -->
+                    <svg id="loader" class="loader w-5 h-5 border-4 border-t-blue-500 border-gray-200 rounded-full animate-spin hidden ml-3" viewBox="0 0 24 24"></svg>
+                </button>
+            </div>
+
+            
+            <!-- Zone d'erreur -->
+            <div id="errorArea" class="hidden p-6 md:p-8 border-t border-gray-200">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md" role="alert">
+                    <strong class="font-bold">Erreur :</strong>
+                    <span class="block sm:inline" id="errorMessage"></span>
+                </div>
+            </div>
+
+            
+            <!-- Zone de résultats -->
+            <div id="resultsArea" class="hidden border-t border-gray-200">
+                
+                <!-- Niveau de crise -->
+                <div class="p-6 md:p-8 bg-gray-50">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Analyse de la situation</h2>
+                    <div id="crisisLevelCard" class="bg-white p-4 border border-gray-200 rounded-md shadow-sm">
+                        <h3 class="font-semibold text-blue-700" id="crisisLevelTitle"></h3>
+                        <p class="text-gray-600 mt-1" id="crisisLevelDescription"></p>
+                    </div>
+                </div>
+
+                
+                <!-- Options de réponse -->
+                <div class="p-6 md:p-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Propositions de réponse</h2>
+                    <div id="optionsContainer" class="space-y-4">
+                        <!-- Les cartes de réponse seront injectées ici par JS -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        
+        <!-- Footer avec les références -->
+        <footer class="mt-8 text-center text-gray-500 text-xs">
+            <p class="mb-2">Méthodologie basée sur les principes de :</p>
+            <p>[1] Validation de l'émotion [2] Affirmation de soi (DEAR MAN) [3] DBT [4] Communication Non Violente (CNV) [5] Marshall Rosenberg [6] Protection de la santé mentale [7] Stop Walking on Eggshells [8] Randi Kreger</p>
+            <p class="mt-4">Cette application est un outil d'assistance et ne remplace pas un conseil professionnel.</p>
+        </footer>
+    </div>
+
+    <script type="module">
+        // --- Éléments du DOM ---
+        const situationInput = document.getElementById('situationInput');
+        const analyzeButton = document.getElementById('analyzeButton');
+        const buttonText = document.getElementById('buttonText');
+        const loader = document.getElementById('loader');
+        
+        const errorArea = document.getElementById('errorArea');
+        const errorMessage = document.getElementById('errorMessage');
+
+        const resultsArea = document.getElementById('resultsArea');
+        const crisisLevelTitle = document.getElementById('crisisLevelTitle');
+        const crisisLevelDescription = document.getElementById('crisisLevelDescription');
+        const optionsContainer = document.getElementById('optionsContainer');
+
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const thumbnailContainer = document.getElementById('thumbnailContainer');
+
+        let uploadedImages = []; // Stocke les fichiers images pour l'envoi
+
+        // --- Constantes de l'API ---
+        const apiKey = ""; // Laissé vide, sera géré par l'environnement d'exécution
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        // --- Instruction Système (Persona de l'IA) ---
+        const systemPrompt = `Vous êtes un expert en communication de crise interpersonnelle, spécialisé dans la gestion des interactions avec des personnes pouvant présenter des schémas de pensée dysfonctionnels ou des troubles (ex: TPL). Votre objectif est d'aider l'utilisateur à analyser une situation (qui peut inclure du texte et/ou des images, comme des captures d'écran de conversations) et à y répondre de manière stratégique pour sa propre protection et sa santé mentale.
+
+Si des images sont fournies, vous devez les analyser pour identifier les protagonistes, le contexte visuel de la communication, et toute information pertinente pour l'analyse.
+
+Voici la méthode que vous devez impérativement suivre :
+1.  Analysez la situation ou le message (texte et/ou image) fourni par l'utilisateur.
+2.  Identifiez le "Niveau de Crise" en vous basant sur cette classification :
+    * Niveau 1 : Accusation délirante ou distorsion majeure de la réalité.
+    * Niveau 2 : Attaque personnelle, injonction paradoxale, ou tentative de manipulation évidente.
+    * Autre : Si la communication ne rentre pas dans les catégories 1 ou 2, décrivez-la (ex: "Demande ambiguë", "Reproche passif-agressif").
+3.  Proposez 2 ou 3 options de réponse rédigées (des scripts clairs).
+4.  Pour CHAQUE option, précisez l'objectif stratégique (ex: "Objectif : Désescalade", "Objectif : Poser une limite claire", "Objectif : Valider l'émotion sans valider l'accusation", "Objectif : Gagner du temps").
+5.  Basez vos propositions de réponse sur les techniques de :
+    * Validation de l'émotion (sans valider le délire) [1].
+    * Affirmation de soi (méthode DEAR MAN) [2, 3].
+    * Communication Non Violente (CNV) [4, 5].
+6.  La priorité absolue est la protection et la santé mentale de l'utilisateur [6, 7, 8]. Les réponses visent à désamorcer les crises et à aider l'utilisateur à ne plus "marcher sur des œufs".
+
+Répondez UNIQUEMENT avec l'objet JSON structuré demandé. Ne fournissez aucune salutation ou texte supplémentaire.`;
+
+        // --- Schéma JSON pour la réponse de l'IA ---
+        const responseSchema = {
+            type: "OBJECT",
+            properties: {
+                "crisisAnalysis": {
+                    type: "OBJECT",
+                    description: "Analyse du niveau de crise.",
+                    properties: {
+                        "level": { 
+                            type: "STRING",
+                            description: "Le niveau de crise identifié (ex: 'Niveau 1', 'Niveau 2', 'Autre')."
+                        },
+                        "description": { 
+                            type: "STRING",
+                            description: "Description de l'analyse (ex: 'Accusation délirante', 'Attaque personnelle')."
+                        }
+                    }
+                },
+                "responseOptions": {
+                    type: "ARRAY",
+                    description: "Une liste de propositions de réponses.",
+                    items: {
+                        type: "OBJECT",
+                        properties: {
+                            "objective": {
+                                type: "STRING",
+                                description: "L'objectif stratégique de cette réponse."
+                            },
+                            "script": {
+                                type: "STRING",
+                                description: "Le texte exact de la réponse proposée."
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // --- Gestion des événements de glisser-déposer et sélection de fichier ---
+
+        dropArea.addEventListener('click', () => fileInput.click());
+
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('highlight');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('highlight');
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.classList.remove('highlight');
+            handleFiles(e.dataTransfer.files); // Gère la liste de fichiers
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files); // Gère la liste de fichiers
+        });
+
+        function handleFiles(files) {
+            // Pas de réinitialisation, pour ajouter des images si on veut
+            // uploadedImages = []; 
+            // thumbnailContainer.innerHTML = ''; 
+
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    // Eviter les doublons
+                    if (!uploadedImages.find(f => f.name === file.name)) {
+                        uploadedImages.push(file);
+                        displayThumbnail(file);
+                    }
+                }
+            });
+        }
+
+        function displayThumbnail(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const thumbnailDiv = document.createElement('div');
+                thumbnailDiv.className = 'thumbnail';
+                thumbnailDiv.innerHTML = `
+                    <img src="${e.target.result}" alt="${escapeHTML(file.name)}">
+                    <span class="remove-thumbnail" data-name="${escapeHTML(file.name)}">&times;</span>
+                `;
+                thumbnailContainer.appendChild(thumbnailDiv);
+
+                thumbnailDiv.querySelector('.remove-thumbnail').addEventListener('click', (ev) => {
+                    ev.stopPropagation(); // Empêche le clic de se propager au dropArea
+                    removeThumbnail(file.name, thumbnailDiv);
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeThumbnail(fileName, thumbnailDiv) {
+            uploadedImages = uploadedImages.filter(file => file.name !== fileName);
+            thumbnailDiv.remove();
+        }
+
+
+        // --- Gestionnaire de clic pour l'analyse ---
+        analyzeButton.addEventListener('click', handleAnalyzeClick);
+
+        async function handleAnalyzeClick() {
+            const inputText = situationInput.value;
+            
+            if (!inputText.trim() && uploadedImages.length === 0) {
+                showError("Veuillez entrer une situation à analyser ou uploader une image.");
+                return;
+            }
+
+            // Activer l'état de chargement
+            setLoading(true);
+            hideError();
+            resultsArea.classList.add('hidden');
+
+            try {
+                // Envoie toutes les images stockées dans 'uploadedImages'
+                const data = await callGeminiAPI(inputText, uploadedImages);
+                displayResults(data);
+            } catch (error) {
+                console.error(error);
+                showError(error.message || "Une erreur est survenue lors de l'analyse.");
+            } finally {
+                // Désactiver l'état de chargement
+                setLoading(false);
+            }
+        }
+
+        // --- Appel API avec gestion des erreurs et backoff exponentiel ---
+        async function callGeminiAPI(userQuery, images) {
+            const parts = [];
+
+            // Ajouter le texte de l'utilisateur s'il existe
+            if (userQuery.trim()) {
+                parts.push({ text: userQuery });
+            }
+
+            // Boucle pour ajouter toutes les images encodées en Base64
+            for (const imageFile of images) {
+                const base64Image = await fileToBase64(imageFile);
+                parts.push({
+                    inlineData: {
+                        mimeType: imageFile.type,
+                        data: base64Image.split(',')[1] // Enlever le préfixe "data:image/png;base64,"
+                    }
+                });
+            }
+
+            const payload = {
+                contents: [{ parts: parts }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: responseSchema,
+                    temperature: 0.5, 
+                }
+            };
+
+            const response = await fetchWithRetry(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erreur de l'API: ${response.status} ${response.statusText}`);
+            }
+
+            const result = await response.json();
+
+            // Vérification de la réponse
+            const candidate = result.candidates?.[0];
+            if (!candidate || !candidate.content?.parts?.[0]?.text) {
+                console.warn("Réponse inattendue de l'API:", result);
+                throw new Error("L'API n'a pas retourné une analyse valide.");
+            }
+
+            // Parser le JSON de la réponse
+            try {
+                return JSON.parse(candidate.content.parts[0].text);
+            } catch (e) {
+                console.error("Erreur de parsing JSON:", e);
+                throw new Error("La réponse de l'API n'a pas pu être formatée correctement.");
+            }
+        }
+
+        // --- Fonction utilitaire pour convertir un fichier en Base64 ---
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // --- Fonction de fetch avec tentatives (backoff exponentiel) ---
+        async function fetchWithRetry(url, options, retries = 4, delay = 1000) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return response;
+                    
+                    if (response.status === 429 || response.status >= 500) {
+                        const wait = delay * Math.pow(2, i);
+                        await new Promise(resolve => setTimeout(resolve, wait));
+                    } else {
+                        return response;
+                    }
+                } catch (error) {
+                    const wait = delay * Math.pow(2, i);
+                    await new Promise(resolve => setTimeout(resolve, wait));
+                }
+            }
+            throw new Error('Échec de la requête API après plusieurs tentatives.');
+        }
+
+
+        // --- Fonctions d'affichage ---
+
+        function displayResults(data) {
+            if (!data.crisisAnalysis || !data.responseOptions) {
+                showError("Les données reçues sont incomplètes ou mal formatées.");
+                return;
+            }
+
+            crisisLevelTitle.textContent = `${data.crisisAnalysis.level} :`;
+            crisisLevelDescription.textContent = data.crisisAnalysis.description;
+
+            optionsContainer.innerHTML = ''; 
+            data.responseOptions.forEach(option => {
+                const card = createOptionCard(option);
+                optionsContainer.appendChild(card);
+            });
+
+            resultsArea.classList.remove('hidden');
+        }
+
+        function createOptionCard(option) {
+            const div = document.createElement('div');
+            div.className = 'bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden';
+            
+            div.innerHTML = `
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-medium bg-green-100 text-green-800 px-2.5 py-0.5 rounded-full">
+                            ${escapeHTML(option.objective)}
+                        </span>
+                        <button class="copy-btn p-1.5 rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition" data-script="${escapeHTML(option.script)}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span class="copy-feedback hidden text-xs text-blue-600">Copié !</span>
+                        </button>
+                    </div>
+                    <p class="text-gray-700 whitespace-pre-wrap">${escapeHTML(option.script)}</p>
+                </div>
+            `;
+
+            const copyButton = div.querySelector('.copy-btn');
+            copyButton.addEventListener('click', (e) => {
+                const button = e.currentTarget;
+                const scriptToCopy = button.getAttribute('data-script');
+                copyToClipboard(scriptToCopy);
+                
+                const feedback = button.querySelector('.copy-feedback');
+                const icon = button.querySelector('svg');
+                icon.classList.add('hidden');
+                feedback.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    feedback.classList.add('hidden');
+                    icon.classList.remove('hidden');
+                }, 1500);
+            });
+
+            return div;
+        }
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                analyzeButton.disabled = true;
+                buttonText.textContent = 'Analyse en cours...';
+                loader.classList.remove('hidden');
+            } else {
+                analyzeButton.disabled = false;
+                buttonText.textContent = 'Analyser la situation';
+                loader.classList.add('hidden');
+            }
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorArea.classList.remove('hidden');
+        }
+
+        function hideError() {
+            errorArea.classList.add('hidden');
+        }
+
+        // --- Utilitaires ---
+
+        function copyToClipboard(text) {
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = text;
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Échec de la copie :', err);
+            }
+            document.body.removeChild(tempTextarea);
+        }
+
+        function escapeHTML(str) {
+            if (typeof str !== 'string') return '';
+            return str.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                }[m];
+            });
+        }
+    </script>
+</body>
+</html>
