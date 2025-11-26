@@ -120,8 +120,8 @@
             <div class="flex items-center gap-2 ml-4">
                 <button id="theme-toggle"
                     class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                    <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
-                    <i data-lucide="sun" class="w-5 h-5 block dark:hidden"></i>
+                    <i id="theme-toggle-dark-icon" data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                    <i id="theme-toggle-light-icon" data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
                 </button>
             </div>
         </header>
@@ -131,6 +131,9 @@
             <!-- Components will be mounted here -->
         </div>
     </main>
+
+    <!-- Toast Container -->
+    <div id="toast-root" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- Protocol Check & Entry Point -->
     <script>
@@ -168,10 +171,7 @@
             }
         }
 
-        // Simple sidebar toggle logic for mobile
-        document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
-            document.getElementById('sidebar').classList.toggle('-translate-x-full');
-        });
+        // Sidebar toggle logic is handled in app.js
     </script>
 
     <!-- Main Module Loader -->

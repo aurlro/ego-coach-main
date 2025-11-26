@@ -1,0 +1,75 @@
+
+> ego-coach-main@1.0.0 test:run
+> vitest run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.13 [39m[90m/Users/aurelien/Documents/Projets/ego-coach-main[39m
+
+ [32m✓[39m tests/services/statsService.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/core/store.test.js [2m([22m[2m3 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+[90mstdout[2m | tests/services/migrationService.test.js[2m > [22m[2mmigrationService[2m > [22m[2mshould migrate entries successfully
+[22m[39m🚀 Starting migration to cloud...
+
+[90mstdout[2m | tests/services/migrationService.test.js[2m > [22m[2mmigrationService[2m > [22m[2mshould migrate entries successfully
+[22m[39m✅ Migration complete: { success: [33m2[39m, failed: [33m0[39m, errors: [] }
+
+[90mstdout[2m | tests/services/migrationService.test.js[2m > [22m[2mmigrationService[2m > [22m[2mshould handle migration errors for individual entries
+[22m[39m🚀 Starting migration to cloud...
+
+[90mstderr[2m | tests/services/migrationService.test.js[2m > [22m[2mmigrationService[2m > [22m[2mshould handle migration errors for individual entries
+[22m[39mFailed to migrate entry 2: Error: Network error
+    at Object.<anonymous> [90m(/Users/aurelien/Documents/Projets/ego-coach-main/[39mtests/services/migrationService.test.js:53:58[90m)[39m
+    at Object.Mock [as saveJournalEntry] [90m(file:///Users/aurelien/Documents/Projets/ego-coach-main/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:280:34[90m)[39m
+    at Object.migrateToCloud [90m(/Users/aurelien/Documents/Projets/ego-coach-main/[39massets/js/services/migrationService.js:34:31[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at [90m/Users/aurelien/Documents/Projets/ego-coach-main/[39mtests/services/migrationService.test.js:55:24
+    at [90mfile:///Users/aurelien/Documents/Projets/ego-coach-main/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:912:20
+
+[90mstdout[2m | tests/services/migrationService.test.js[2m > [22m[2mmigrationService[2m > [22m[2mshould handle migration errors for individual entries
+[22m[39m✅ Migration complete: {
+  success: [33m1[39m,
+  failed: [33m1[39m,
+  errors: [ { id: [32m'2'[39m, error: [32m'Network error'[39m } ]
+}
+
+ [32m✓[39m tests/services/migrationService.test.js [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+[90mstdout[2m | tests/settings.test.js[2m > [22m[2mSettings Logic[2m > [22m[2mRepository should default to local mode
+[22m[39m💾 Using LocalStorage
+
+[90mstdout[2m | tests/settings.test.js[2m > [22m[2mSettings Logic[2m > [22m[2mRepository should use cloud if storage_mode is cloud and keys exist
+[22m[39m☁️ Connected to Supabase
+
+[90mstdout[2m | tests/settings.test.js[2m > [22m[2mSettings Logic[2m > [22m[2mRepository should use local if storage_mode is local even if keys exist
+[22m[39m💾 Using LocalStorage
+
+ [32m✓[39m tests/settings.test.js [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/ui/layout.test.js [2m([22m[2m3 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/analysisWizard.test.js[2m [ tests/analysisWizard.test.js ][22m
+[31m[1mError[22m: Failed to resolve import "../assets/js/components/analysisWizard.js" from "tests/analysisWizard.test.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/Users/aurelien/Documents/Projets/ego-coach-main/tests/analysisWizard.test.js[39m:3:0
+[33m  15 |      }
+  16 |  }));
+  17 |  const __vi_import_0__ = await import("../assets/js/components/analysisWizard.js");
+     |                                       ^
+  18 |  const __vi_import_1__ = await import("../assets/js/services/aiService.js");
+  19 |  const __vi_import_2__ = await import("../assets/js/data/repository.js");[39m
+[90m [2m❯[22m TransformPluginContext._formatLog node_modules/vite/dist/node/chunks/config.js:[2m29647:43[22m[39m
+[90m [2m❯[22m TransformPluginContext.error node_modules/vite/dist/node/chunks/config.js:[2m29644:14[22m[39m
+[90m [2m❯[22m normalizeUrl node_modules/vite/dist/node/chunks/config.js:[2m27767:18[22m[39m
+[90m [2m❯[22m node_modules/vite/dist/node/chunks/config.js:[2m27825:32[22m[39m
+[90m [2m❯[22m TransformPluginContext.transform node_modules/vite/dist/node/chunks/config.js:[2m27793:4[22m[39m
+[90m [2m❯[22m EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/config.js:[2m29445:14[22m[39m
+[90m [2m❯[22m loadAndTransform node_modules/vite/dist/node/chunks/config.js:[2m23316:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 09:58:55
+[2m   Duration [22m 2.01s[2m (transform 379ms, setup 0ms, collect 876ms, tests 75ms, environment 6.97s, prepare 810ms)[22m
+

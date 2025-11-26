@@ -4,17 +4,18 @@ Nous sommes ravis que vous souhaitiez contribuer à EgoCoach ! Ce guide a pour b
 
 ##  Philosophie du Projet
 
--   **Léger et Accessible** : Le projet utilise du JavaScript "vanilla" et Tailwind CSS (via CDN) pour éviter toute complexité liée au build. L'objectif est qu'un développeur puisse cloner le dépôt et lancer l'application en moins d'une minute.
+-   **Léger et Accessible** : Le projet utilise du JavaScript "vanilla" et Tailwind CSS (via CDN). Bien qu'un script de build (`npm run build`) existe pour nettoyer le projet avant déploiement, le développement se fait directement sur les fichiers sources.
 -   **Modularité** : Chaque fonctionnalité majeure est encapsulée dans son propre module (ex: `createJournalModule`), en suivant un modèle de fabrique (`factory pattern`). Cela garantit que le code reste organisé, testable et facile à maintenir.
 -   **Confidentialité d'Abord** : L'application fonctionne entièrement côté client, en utilisant `localStorage` pour la persistance des données. Aucune information sensible n'est envoyée sur un serveur.
 
 ## 🏗️ Structure du Projet
 
--   `index.html`: Le point d'entrée de l'application. Il charge les scripts et les styles.
--   `assets/js/app.js`: Le cœur de l'application, où tous les modules sont initialisés et orchestrés.
--   `assets/js/data-store.js`: Une couche d'abstraction qui gère la lecture et l'écriture des données. C'est le seul endroit à modifier si l'on souhaite changer le système de stockage (ex: passer de `localStorage` à une base de données).
--   `assets/css/styles.css`: Contient les styles personnalisés qui étendent les classes utilitaires de Tailwind CSS.
--   `docs/`: Contient la documentation détaillée du produit, le changelog et les archives.
+-   `index.html`: Le point d'entrée de l'application.
+-   `assets/js/core/app.js`: Le cœur de l'application (Router, Store).
+-   `assets/js/data/repository.js`: Gestion des données (LocalStorage / Supabase).
+-   `assets/js/modules/`: Logique métier (Analyzer, Journal, etc.).
+-   `assets/js/components/`: Composants UI (Pages, Modales).
+-   `assets/css/`: Styles (Tailwind via CDN + styles personnalisés).
 
 ## ✍️ Conventions de Style
 

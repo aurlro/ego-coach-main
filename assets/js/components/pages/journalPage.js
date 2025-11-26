@@ -15,47 +15,55 @@ export class JournalPage {
         const { journal } = store.getState();
 
         const entriesHtml = journal.length > 0
-            ? journal.map(entry => `
-                <div class="p-6 border-b border-slate-200 dark:border-slate-700 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors group">
-                    <div class="flex justify-between items-start gap-4">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-3 mb-2">
-                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                                    ${entry.egoFocus || 'Général'}
-                                </span>
-                                <span class="text-xs text-slate-400 flex items-center gap-1">
-                                    <i data-lucide="calendar" class="w-3 h-3"></i>
-                                    ${new Date(entry.createdAt).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                                </span>
+            ? `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                ${journal.map(entry => `
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow group relative flex flex-col h-full">
+                    <div class="flex justify-between items-start gap-4 mb-4">
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                            ${entry.egoFocus || 'Général'}
+                        </span>
+                        <button class="btn-reopen p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100" data-id="${entry.id}" title="Rouvrir / Editer">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                        </button>
+                        <button class="btn-delete p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100" data-id="${entry.id}" title="Supprimer">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2 line-clamp-1" title="${entry.summary || 'Analyse sans titre'}">
+                            ${entry.summary || 'Analyse sans titre'}
+                        </h3>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm line-clamp-3 mb-4">
+                            ${entry.context || 'Pas de contexte'}
+                        </p>
+                        
+                        ${entry.insights && entry.insights.length > 0 ? `
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                ${entry.insights.slice(0, 2).map(insight => `
+                                    <span class="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+                                        <i data-lucide="lightbulb" class="w-3 h-3 text-yellow-500"></i> ${insight.substring(0, 20)}...
+                                    </span>
+                                `).join('')}
                             </div>
-                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                                ${entry.summary || 'Analyse sans titre'}
-                            </h3>
-                            <p class="text-slate-600 dark:text-slate-300 text-sm line-clamp-3 mb-4">
-                                ${entry.context || 'Pas de contexte'}
-                            </p>
-                            
-                            ${entry.insights && entry.insights.length > 0 ? `
-                                <div class="flex flex-wrap gap-2">
-                                    ${entry.insights.slice(0, 2).map(insight => `
-                                        <span class="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
-                                            <i data-lucide="lightbulb" class="w-3 h-3 text-yellow-500"></i> ${insight.substring(0, 30)}...
-                                        </span>
-                                    `).join('')}
-                                </div>
-                            ` : ''}
-                        </div>
+                        ` : ''}
+                    </div>
 
-                        <div class="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="btn-delete p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors" data-id="${entry.id}" title="Supprimer">
-                                <i data-lucide="trash-2" class="w-5 h-5"></i>
-                            </button>
-                        </div>
+                    <div class="pt-4 mt-auto border-t border-slate-100 dark:border-slate-700 flex items-center justify-between text-xs text-slate-400">
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            ${new Date(entry.createdAt).toLocaleDateString()}
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="clock" class="w-3 h-3"></i>
+                            ${new Date(entry.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
                     </div>
                 </div>
-            `).join('')
+            `).join('')}
+            </div>`
             : `
-                <div class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="flex flex-col items-center justify-center py-16 text-center bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
                     <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
                         <i data-lucide="book-open" class="w-8 h-8 text-slate-400"></i>
                     </div>
@@ -71,7 +79,7 @@ export class JournalPage {
             `;
 
         this.container.innerHTML = `
-            <div class="max-w-4xl mx-auto">
+            <div class="w-full max-w-[1600px] mx-auto px-6">
                 <div class="flex items-center justify-between mb-8">
                     <div>
                         <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Mon Journal</h1>
@@ -85,9 +93,7 @@ export class JournalPage {
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-                    ${entriesHtml}
-                </div>
+                ${entriesHtml}
             </div>
         `;
 
@@ -99,16 +105,39 @@ export class JournalPage {
         this.container.querySelectorAll('.btn-delete').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const id = e.currentTarget.dataset.id;
-                if (confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?')) {
-                    try {
-                        await repository.deleteJournalEntry(id);
-                        const updatedJournal = await repository.getJournal();
-                        store.setState({ journal: updatedJournal });
-                        // Toast success (we need to import toast manager or use event bus)
-                        console.log('Entry deleted');
-                    } catch (error) {
-                        console.error('Failed to delete:', error);
-                    }
+
+                import('../ui/confirmationModal.js').then(({ showConfirmationModal }) => {
+                    showConfirmationModal({
+                        title: 'Supprimer cette entrée ?',
+                        message: 'Cette action est irréversible. Êtes-vous sûr de vouloir supprimer cette analyse de votre journal ?',
+                        confirmText: 'Supprimer',
+                        cancelText: 'Annuler',
+                        onConfirm: async () => {
+                            try {
+                                await repository.deleteJournalEntry(id);
+                                const updatedJournal = await repository.getJournal();
+                                store.setState({ journal: updatedJournal });
+                                console.log('Entry deleted');
+                            } catch (error) {
+                                console.error('Failed to delete:', error);
+                            }
+                        }
+                    });
+                });
+            });
+        });
+
+        this.container.querySelectorAll('.btn-reopen').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = e.currentTarget.dataset.id;
+                const entry = store.getState().journal.find(e => e.id === id);
+                if (entry && entry.data) {
+                    // Set current analysis in store to pre-fill wizard
+                    store.setState({ currentAnalysis: entry.data });
+                    // Navigate to analyzer
+                    window.location.hash = 'analyze';
+                } else {
+                    console.warn('Cannot reopen entry: missing data', entry);
                 }
             });
         });

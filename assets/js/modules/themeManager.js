@@ -34,16 +34,17 @@ export function createThemeManager() {
     }
 
     function updateIcons() {
-        // If icons are Lucide icons (svg), we might need to toggle classes on them
-        // But here we assume they are elements with IDs
+        // Icons are inverted: Moon (darkIcon) visible in Light mode, Sun (lightIcon) visible in Dark mode
         if (!darkIcon || !lightIcon) return;
 
         if (document.documentElement.classList.contains('dark')) {
-            darkIcon.classList.remove('hidden');
-            lightIcon.classList.add('hidden');
-        } else {
+            // In Dark mode, show Sun (to switch to Light)
             lightIcon.classList.remove('hidden');
             darkIcon.classList.add('hidden');
+        } else {
+            // In Light mode, show Moon (to switch to Dark)
+            darkIcon.classList.remove('hidden');
+            lightIcon.classList.add('hidden');
         }
     }
 

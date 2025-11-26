@@ -7,7 +7,7 @@ export class HomePage {
         const stats = statsService.calculateStats(journal);
 
         container.innerHTML = `
-            <div class="max-w-5xl mx-auto space-y-8">
+            <div class="w-full max-w-[1600px] mx-auto space-y-8 px-6">
                 <!-- Welcome Section -->
                 <div class="text-center py-8">
                     <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">

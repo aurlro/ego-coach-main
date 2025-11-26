@@ -1,53 +1,85 @@
-# EgoCoach : Votre Boîte à Outils de Communication Stratégique
+# EgoCoach Phoenix 🦅
 
-EgoCoach est une application web locale conçue pour aider les professionnels, en particulier les Product Owners et Business Analysts, à gérer les conflits interpersonnels. L'objectif est de transformer des réactions instinctives en réponses structurées grâce à des outils d'auto-analyse, un tableau de bord de suivi et une assistance par IA, le tout en garantissant une confidentialité totale (aucune donnée n'est envoyée sur un serveur).
+**EgoCoach Phoenix** est une application web conçue pour vous aider à analyser, comprendre et désamorcer les conflits interpersonnels. En agissant comme un "coach de poche", elle vous guide pour transformer vos réactions automatiques (Ego) en réponses conscientes et constructives.
 
-## ✨ Fonctionnalités Principales
+![EgoCoach Dashboard](https://via.placeholder.com/800x400?text=EgoCoach+Phoenix+Dashboard)
 
--   **Analyse Manuelle Guidée** : Un wizard en quatre étapes (Constat, Ego, MVP, Action) pour décortiquer chaque situation, identifier les schémas émotionnels et préparer des réponses constructives.
--   **Journal de Bord & Tableau de Bord** : Conservez un historique de vos analyses, filtrez-les par type d'ego, et suivez vos progrès grâce à des métriques clés (ego dominant, série sans réaction défensive).
--   **Assistance par IA** : Obtenez des propositions de scripts et des analyses de situation grâce à une IA entraînée à la communication de crise (mode heuristique local, prêt pour une intégration avec Gemini).
--   **Guide de Ressources** : Accédez rapidement à un glossaire des concepts clés (`Ego Radar`) et à des frameworks de communication pour vous aider en temps réel.
--   **Confidentialité Totale** : Toutes les données sont stockées localement dans votre navigateur (`localStorage`). Vous pouvez exporter et importer votre journal au format JSON pour une portabilité maximale.
+## ✨ Fonctionnalités Clés
 
-## 🚀 Démarrage Rapide
+### 1. 🧠 Assistant de Résolution (Analyseur)
+Un parcours guidé en 5 étapes pour décoder n'importe quelle situation conflictuelle :
+- **Situation** : Décrivez les faits objectivement.
+- **Diagnostic** : Évaluez le niveau de crise et identifiez les déclencheurs.
+- **Décodage** : Comprenez les besoins cachés (les vôtres et ceux de l'autre).
+- **Stratégie** : Recevez une recommandation de protocole (ex: SET, DEAR MAN).
+- **Réponse** : Générez des scripts de réponse sur-mesure grâce à l'IA.
 
-Ce projet est une application web statique qui ne nécessite aucun processus de build complexe.
+### 2. 📔 Journal & Tableau de Bord
+- Sauvegardez vos analyses pour y revenir plus tard.
+- Suivez votre progression avec des statistiques (Ego dominant, jours sans mode défensif).
+- Rouvrez une ancienne analyse pour l'affiner.
 
-### Prérequis
+### 3. 🥋 Le Dojo
+- Entraînez-vous avec des scénarios réalistes.
+- Identifiez les mécanismes de l'Ego (Juge, Victime, Sauveur, Défensif).
+- Recevez un feedback immédiat sur vos choix de réponse.
 
--   Un navigateur web moderne (Chrome, Firefox, Edge).
--   Python 3 (pour le serveur de développement recommandé).
+### 4. 📚 Guide de Survie
+- Une bibliothèque de concepts pour comprendre les mécanismes de l'Ego.
+- Des "Antidotes" pratiques pour chaque posture défensive.
 
-### Étapes d'installation
+### 5. ⚙️ Paramètres Avancés
+- **Mode Stockage** : Choisissez entre LocalStorage (privé, sur votre appareil) ou Supabase (Cloud, synchronisé).
+- **IA Flexible** : Connectez votre propre clé API (Google Gemini, OpenAI) ou utilisez Ollama en local.
+- **Thème** : Mode Clair / Sombre.
 
-1.  **Clonez le dépôt :**
-    ```bash
-    git clone https://github.com/votre-repo/ego-coach.git
-    cd ego-coach
     ```
 
-2.  **Lancez un serveur de développement :**
-    La manière la plus simple de lancer un serveur local est d'utiliser le module `http.server` de Python.
+2.  **Lancer un serveur local** :
+    Pour des raisons de sécurité (CORS, Modules ES6), l'application ne peut pas être ouverte directement via `file://`.
+
+    **Avec Python :**
     ```bash
     python3 -m http.server 8000
     ```
-    Si vous préférez, vous pouvez aussi utiliser `npx` :
+
+    **Avec Node.js (npx) :**
     ```bash
-    npx serve .
+    npx serve
     ```
 
-4. **Lancez le script `start.sh` (macOS) :**
-```bash
-chmod +x start.sh && ./start.sh
+3.  **Ouvrir l'application** :
+    Rendez-vous sur `http://localhost:8000` dans votre navigateur.
+
+## 🛠 Technologies
+
+- **Frontend** : Vanilla JavaScript (ES6 Modules), HTML5.
+- **Styling** : Tailwind CSS (via CDN).
+- **Icônes** : Lucide Icons.
+- **Backend (Optionnel)** : Supabase (Base de données & Auth).
+- **IA** : Intégration API pour Google Gemini, OpenAI, et Ollama.
+
+## 📂 Structure du Projet
+
 ```
-3.  **Ouvrez l'application :**
-    Ouvrez votre navigateur et rendez-vous à l'adresse `http://localhost:8000`.
+ego-coach-main/
+├── assets/
+│   ├── css/            # Styles globaux
+│   ├── js/
+│   │   ├── components/ # Composants UI (Pages, Modales)
+│   │   ├── core/       # Cœur de l'app (Router, Store, EventBus)
+│   │   ├── data/       # Gestion des données (Repository, Adapters)
+│   │   ├── modules/    # Logique métier (Analyzer, Journal, etc.)
+│   │   └── services/   # Services externes (AI, Stats)
+│   └── ...
+├── index.html          # Point d'entrée unique
+└── README.md           # Documentation
+```
 
 ## 🤝 Contribuer
 
-Les contributions sont les bienvenues ! Si vous souhaitez améliorer EgoCoach, veuillez consulter notre guide de contribution (`CONTRIBUTING.md`) pour connaître les standards de code, les procédures de test et l'architecture du projet.
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une Issue ou une Pull Request.
 
 ## 📄 Licence
 
-Ce projet est distribué sous la licence MIT.
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.

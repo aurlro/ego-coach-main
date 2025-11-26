@@ -1,14 +1,16 @@
 {
   "name": "ego-coach-main",
   "version": "1.0.0",
-  "description": "EgoCoach est une application web locale conçue pour aider les professionnels, en particulier les Product Owners et Business Analysts, à gérer les conflits interpersonnels. L'objectif est de transformer des réactions instinctives en réponses structurées grâce à des outils d'auto-analyse, un tableau de bord de suivi et une assistance par IA, le tout en garantissant une confidentialité totale (aucune donnée n'est envoyée sur un serveur).",
+  "description": "EgoCoach Phoenix est une application web conçue pour vous aider à analyser, comprendre et désamorcer les conflits interpersonnels. En agissant comme un 'coach de poche', elle vous guide pour transformer vos réactions automatiques (Ego) en réponses conscientes et constructives.",
   "main": "index.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && mkdir -p dist && cp index.html robots.txt sitemap.xml dist/ && cp -r assets dist/"
   },
   "repository": {
     "type": "git",

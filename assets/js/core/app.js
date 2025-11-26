@@ -3,6 +3,7 @@ import { store } from './store.js';
 import { repository } from '../data/repository.js';
 import { bus } from './eventBus.js';
 import { SettingsModal } from '../components/settingsModal.js';
+import { OnboardingModal } from '../components/modals/onboardingModal.js';
 
 // Import Pages (will be created later)
 // For now we'll use placeholders or dynamic imports in the router config
@@ -14,6 +15,7 @@ class App {
     }
 
     async init() {
+        const start = performance.now();
         console.log('🚀 Phoenix App Initializing...');
 
         // 1. Initialize Data Layer
@@ -29,6 +31,15 @@ class App {
         // Initialize Settings Modal
         this.settingsModal.init();
 
+        // Check for Onboarding
+        const onboardingCompleted = localStorage.getItem('onboarding_completed');
+        if (!onboardingCompleted) {
+            const onboarding = new OnboardingModal(() => {
+                console.log('✨ Onboarding completed');
+            });
+            onboarding.init();
+        }
+
         // 2. Setup Router
         const routes = {
             'home': {
@@ -43,25 +54,13 @@ class App {
                     return new JournalPage();
                 }
             },
-            'analyzer-manual': {
+            'analyzer': {
                 component: async () => {
                     const { AnalyzerPage } = await import('../components/pages/analyzerPage.js');
                     return new AnalyzerPage();
                 }
             },
-            'analyzer-ai': {
-                component: async () => {
-                    const { AIAnalyzerPage } = await import('../components/pages/aiAnalyzerPage.js');
-                    return new AIAnalyzerPage();
-                }
-            },
-            'analyzer-quick': {
-                component: async () => {
-                    const { AIAnalyzerPage } = await import('../components/pages/aiAnalyzerPage.js');
-                    return new AIAnalyzerPage();
-                }
-            },
-            'analyze': { // Fallback/Alias
+            'analyze': { // Alias
                 component: async () => {
                     const { AnalyzerPage } = await import('../components/pages/analyzerPage.js');
                     return new AnalyzerPage();
@@ -87,7 +86,7 @@ class App {
         // 3. Global Event Listeners
         this.attachGlobalListeners();
 
-        console.log('✅ App Ready');
+        console.log(`✅ App Ready (took ${Math.round(performance.now() - start)}ms)`);
     }
 
     attachGlobalListeners() {

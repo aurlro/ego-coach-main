@@ -10,3 +10,36 @@ export const JournalEntrySchema = {
         return errors;
     }
 };
+
+export const AnalysisSchema = {
+    createEmpty() {
+        return {
+            id: crypto.randomUUID(),
+            createdAt: new Date().toISOString(),
+            step1: {
+                rawContent: '',
+                inputSource: 'TEXT',
+                contextTags: []
+            },
+            step2: {
+                crisisLevel: null, // { level: 'NIVEAU_1', label: '...' }
+                observedTriggers: [],
+                factCheck: { userReality: '', partnerDistortion: '' }
+            },
+            step3: {
+                surfaceEmotion: '',
+                underlyingNeed: '',
+                translation: ''
+            },
+            step4: {
+                recommendedMethod: '',
+                objective: '',
+                safetyWarning: false
+            },
+            step5: {
+                options: [] // [{ id, type, script, rationale }]
+            },
+            feedback: null // { rating: 1-5, comment: '' }
+        };
+    }
+};

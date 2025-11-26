@@ -164,3 +164,5 @@ export function createModalManager() {
 
     return { show, hide };
 }
+
+export const toast = createToastManager();

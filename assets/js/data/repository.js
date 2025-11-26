@@ -17,15 +17,18 @@ export const repository = {
     useCloud: false,
 
     async init() {
-        // Check for credentials in LocalStorage (set by SettingsModal)
+        // Check storage mode preference (default to 'local' for privacy)
+        const storageMode = localStorage.getItem('storage_mode') || 'local';
+
+        // Check for credentials in LocalStorage
         const storedUrl = localStorage.getItem('supabase_url');
         const storedKey = localStorage.getItem('supabase_key');
 
-        // Initialize Supabase if credentials exist (either from config or storage)
+        // Initialize Supabase if credentials exist AND mode is 'cloud'
         const url = storedUrl || SUPABASE.URL;
         const key = storedKey || SUPABASE.ANON_KEY;
 
-        if (url && key && !url.includes('YOUR_SUPABASE_URL')) {
+        if (storageMode === 'cloud' && url && key && !url.includes('YOUR_SUPABASE_URL')) {
             this.adapter = new SupabaseAdapter(url, key);
             if (this.adapter.isReady()) {
                 this.useCloud = true;
@@ -35,6 +38,10 @@ export const repository = {
 
         if (!this.useCloud) {
             console.log('💾 Using LocalStorage');
+            // Ensure we are in local mode if cloud failed or not requested
+            if (storageMode === 'cloud') {
+                console.warn('Cloud connection failed or missing credentials, falling back to local.');
+            }
         }
         return true;
     },
