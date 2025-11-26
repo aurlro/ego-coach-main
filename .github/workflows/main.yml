@@ -23,7 +23,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         
         # Chemin absolu fourni
-        server-dir: /home/dore2115/ego-coach.aurelien-rodier.fr/
+        server-dir: ./
         
         # Sécurité : ne jamais supprimer le dossier .git ou des fichiers de config serveur
         exclude: |
