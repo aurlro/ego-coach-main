@@ -1,249 +1,181 @@
 <!DOCTYPE html>
-<html lang="fr" class="">
+<html lang="fr" class="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boîte à Outils de Communication</title>
+    <title>EgoCoach Phoenix</title>
     <meta name="description" content="Outil d'analyse et d'aide à la communication interpersonnelle.">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Legacy CSS (to be refactored later if needed) -->
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/modules.css">
-    <link rel="stylesheet" href="assets/css/modal.css">
-    <link rel="stylesheet" href="assets/css/accessibility-fixes.css">
-    <link rel="stylesheet" href="assets/css/ux-improvements.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        // Set "dark" theme by default
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('boite-outils-theme', 'dark');
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body
-    class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 font-inter antialiased">
+    class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300 font-sans antialiased">
 
-    <!-- Sidebar Navigation (Desktop) -->
-    <aside id="sidebar" class="sidebar">
-        <div class="sidebar-header">
+    <!-- Sidebar -->
+    <div id="sidebar-overlay"
+        class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden transition-opacity duration-300 opacity-0"></div>
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 lg:translate-x-0 -translate-x-full">
+        <div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800">
             <div class="flex items-center gap-3">
-                <div class="app-icon">
-                    <!-- ICON: Puzzle -->
-                    <i data-lucide="puzzle" class="w-6 h-6 text-white"></i>
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                    <i data-lucide="puzzle" class="w-5 h-5"></i>
                 </div>
-                <div class="flex-1">
+                <div>
                     <h1 class="text-sm font-bold text-slate-900 dark:text-white">EgoCoach</h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">v1.0</p>
+                    <p class="text-xs text-slate-500">Phoenix v2.0</p>
                 </div>
             </div>
-            <button id="sidebar-close" class="btn btn-ghost btn-icon btn-sm lg:hidden">
-                <i data-lucide="x" class="icon-sm"></i>
-            </button>
         </div>
 
-        <!-- Navigation principale -->
-        <nav class="sidebar-nav">
-            <div class="nav-section">
-                <p class="nav-section-title">PRINCIPAL</p>
-                <a href="#" class="nav-item active" data-page="home">
-                    <i data-lucide="layout-dashboard" class="nav-icon"></i>
-                    <span>Tableau de bord</span>
-                </a>
-                <a href="#" class="nav-item" data-page="journal">
-                    <i data-lucide="book" class="nav-icon"></i>
-                    <span>Mon Journal</span>
-                </a>
+        <nav class="p-4 space-y-6 overflow-y-auto h-[calc(100vh-4rem)]">
+            <div>
+                <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Principal</p>
+                <div class="space-y-1">
+                    <a href="#home" data-link
+                        class="flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                        Tableau de bord
+                    </a>
+                    <a href="#journal" data-link
+                        class="flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        <i data-lucide="book" class="w-5 h-5"></i>
+                        Mon Journal
+                    </a>
+                </div>
             </div>
 
-            <div class="nav-section">
-                <p class="nav-section-title">ANALYSER</p>
-                <a href="#" class="nav-item" data-page="analyzer-quick">
-                    <i data-lucide="zap" class="nav-icon"></i>
-                    <span>Analyse Rapide</span>
-                    <span class="nav-shortcut">⌘K</span>
-                </a>
-                <a href="#" class="nav-item" data-page="analyzer-manual">
-                    <i data-lucide="clipboard-list" class="nav-icon"></i>
-                    <span>Analyse Guidée</span>
-                </a>
-                <a href="#" class="nav-item" data-page="analyzer-ai">
-                    <i data-lucide="sparkles" class="nav-icon"></i>
-                    <span>Analyse IA</span>
-                    <span class="nav-badge badge-ai">AI</span>
-                </a>
+            <div>
+                <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Analyser</p>
+                <div class="space-y-1">
+                    <a href="#analyze" data-link
+                        class="flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        <i data-lucide="zap" class="w-5 h-5"></i>
+                        Analyseur
+                    </a>
+                </div>
             </div>
 
-            <div class="nav-section">
-                <p class="nav-section-title">APPRENDRE</p>
-                <a href="#" class="nav-item" data-page="guide">
-                    <i data-lucide="book-open" class="nav-icon"></i>
-                    <span>Guide & Concepts</span>
-                </a>
-                <a href="#" class="nav-item" data-page="insights">
-                    <i data-lucide="lightbulb" class="nav-icon"></i>
-                    <span>Mes Insights</span>
-                </a>
+            <div>
+                <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Entraînement</p>
+                <div class="space-y-1">
+                    <a href="#dojo" data-link
+                        class="flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        <i data-lucide="swords" class="w-5 h-5"></i>
+                        Dojo
+                    </a>
+                    <a href="#guide" data-link
+                        class="flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                        Guide
+                    </a>
+                </div>
             </div>
         </nav>
-
-        <!-- Quick Actions -->
-        <div class="sidebar-footer">
-            <!-- User Simulation moved to Settings -->
-
-            <button class="btn btn-primary btn-md w-full justify-center mb-3" id="quick-analyze">
-                <i data-lucide="zap" class="icon-md"></i>
-                <span>Nouvelle analyse</span>
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+            <button id="open-settings-btn"
+                class="flex items-center gap-3 px-4 py-2 w-full text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+                Paramètres
             </button>
-
-            <div class="sidebar-settings">
-                <button id="theme-toggle" class="btn btn-secondary btn-icon btn-md" title="Changer le thème">
-                    <i id="theme-toggle-dark-icon" data-lucide="moon" class="icon-md hidden"></i>
-                    <i id="theme-toggle-light-icon" data-lucide="sun" class="icon-md hidden"></i>
-                </button>
-                <button class="btn btn-secondary btn-icon btn-md" id="settings-btn" title="Paramètres">
-                    <i data-lucide="settings" class="icon-md"></i>
-                </button>
-            </div>
         </div>
     </aside>
 
-    <!-- Mobile Navigation Toggle -->
-    <button id="sidebar-toggle" class="mobile-nav-toggle btn btn-ghost btn-icon btn-lg lg:hidden">
-        <i data-lucide="menu" class="icon-lg"></i>
-    </button>
-
-    <!-- Main Content Area -->
-    <main id="main-content" class="main-content">
-
-        <!-- Page Header avec Breadcrumb -->
-        <header class="page-header">
-            <div class="breadcrumb">
-                <span class="breadcrumb-item active" id="current-page-breadcrumb">Tableau de bord</span>
+    <!-- Main Content -->
+    <main class="lg:ml-64 min-h-screen flex flex-col">
+        <!-- Header -->
+        <header
+            class="w-full h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 px-6 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button id="sidebar-toggle" class="lg:hidden p-2 -ml-2 text-slate-600 dark:text-slate-400">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 id="page-title" class="text-lg font-semibold text-slate-800 dark:text-white"></h2>
             </div>
 
-            <div class="page-actions">
-                <button class="btn btn-ghost btn-icon btn-md" title="Rechercher (⌘K)">
-                    <i data-lucide="search" class="icon-md"></i>
-                </button>
-                <button class="btn btn-ghost btn-icon btn-md relative" title="Notifications">
-                    <i data-lucide="bell" class="icon-md"></i>
-                    <span class="notification-badge">2</span>
+            <div class="flex items-center gap-2 ml-4">
+                <button id="theme-toggle"
+                    class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                    <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="sun" class="w-5 h-5 block dark:hidden"></i>
                 </button>
             </div>
         </header>
 
-        <!-- Content Container -->
-        <div class="content-wrapper">
-
-            <!-- Page: Tableau de bord -->
-            <section id="page-home" class="page-content">
-                <div id="home-root"></div>
-            </section>
-
-            <!-- Page: Journal -->
-            <section id="page-journal" class="page-content hidden">
-                <div id="journal-root"></div>
-            </section>
-
-            <!-- Page: Analyse Rapide (Nouveau) -->
-            <section id="page-analyzer-quick" class="page-content hidden">
-                <div id="quick-root"></div>
-            </section>
-
-            <!-- Page: Analyse Manuelle -->
-            <section id="page-analyzer-manual" class="page-content hidden">
-                <div id="manual-root"></div>
-            </section>
-
-            <!-- Page: Analyse IA -->
-            <section id="page-analyzer-ai" class="page-content hidden">
-                <div id="ai-root"></div>
-            </section>
-
-            <!-- Page: Guide -->
-            <section id="page-guide" class="page-content hidden">
-                <div id="guide-root"></div>
-            </section>
-
-            <!-- Page: Insights (Nouveau) -->
-            <section id="page-insights" class="page-content hidden">
-                <div id="insights-root"></div>
-            </section>
-
+        <!-- App Root -->
+        <div id="app-root" class="flex-1 p-6">
+            <!-- Components will be mounted here -->
         </div>
     </main>
 
-    <!-- Modals -->
-    <div id="pause-modal" class="hidden"></div>
-    <div id="journal-modal" class="hidden"></div>
-    <div id="dojo-modal" class="hidden"></div>
-    <div id="gemini-modal" class="hidden"></div>
-    <div id="ollama-modal" class="hidden"></div>
-    <div id="settings-modal" class="hidden"></div>
-    <div id="onboarding-modal" class="hidden"></div>
+    <!-- Protocol Check & Entry Point -->
+    <script>
+        // Check if running via file:// protocol
+        if (window.location.protocol === 'file:') {
+            const root = document.getElementById('app-root');
+            if (root) {
+                root.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-center p-8">
+                        <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-2xl max-w-lg">
+                            <div class="w-16 h-16 bg-red-100 dark:bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-600 dark:text-red-400">
+                                <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Mode de lancement incorrect</h2>
+                            <p class="text-slate-600 dark:text-slate-300 mb-6">
+                                L'application ne peut pas fonctionner en ouvrant directement le fichier (<code>file://</code>) pour des raisons de sécurité (CORS/Modules).
+                            </p>
+                            <div class="text-left bg-white dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-700 mb-6">
+                                <p class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Comment lancer l'application :</p>
+                                <ol class="list-decimal list-inside text-sm text-slate-600 dark:text-slate-400 space-y-2">
+                                    <li>Ouvrez un terminal dans le dossier du projet</li>
+                                    <li>Lancez un serveur local :
+                                        <code class="block mt-1 bg-slate-100 dark:bg-slate-900 p-2 rounded text-blue-600 dark:text-blue-400 font-mono">python3 -m http.server</code>
+                                        <span class="text-xs text-slate-500 block mt-1">ou si vous avez Node.js :</span>
+                                        <code class="block mt-1 bg-slate-100 dark:bg-slate-900 p-2 rounded text-blue-600 dark:text-blue-400 font-mono">npx serve</code>
+                                    </li>
+                                    <li>Ouvrez l'URL affichée (ex: http://localhost:8000)</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // Initialize icons for the error message
+                if (window.lucide) lucide.createIcons();
+            }
+        }
 
-    <!-- Command Palette (⌘K) -->
-    <div id="command-palette" class="command-palette hidden">
-        <div class="command-palette-backdrop"></div>
-        <div class="command-palette-content">
-            <input type="text" id="command-input" placeholder="Rechercher ou exécuter une commande..."
-                class="command-input" />
-            <div id="command-results" class="command-results"></div>
-        </div>
-    </div>
+        // Simple sidebar toggle logic for mobile
+        document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        });
+    </script>
 
-    <!-- Toast Container -->
-    <div id="toast-root" class="toast-root" role="status" aria-live="polite" aria-atomic="false"></div>
-
-    <!-- Floating Action Button (Mobile) -->
-    <button id="fab" class="fab lg:hidden">
-        <i data-lucide="plus" class="w-6 h-6"></i>
-    </button>
-
-    <!-- Modules et Services -->
-    <!-- Core & Config -->
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/utils.js"></script>
-    <script src="assets/js/security.js"></script>
-    <script src="assets/js/qualityGuards.js"></script>
-    <script src="assets/js/iconSystem.js"></script>
-    <script src="assets/js/data-store.js"></script>
-
-    <!-- Shared Modules -->
-    <script src="assets/js/modules/ui.js"></script>
-    <script src="assets/js/modules/themeManager.js"></script>
-    <script src="assets/js/modules/encryption.js"></script>
-    <script src="assets/js/modules/notificationManager.js"></script>
-    <script src="assets/js/modules/navigationManager.js"></script>
-    <script src="assets/js/modules/commandPalette.js"></script>
-
-    <!-- Services -->
-    <script src="assets/js/modules/geminiService.js"></script>
-    <script src="assets/js/modules/ollamaService.js"></script>
-
-    <!-- Feature Modules -->
-    <script src="assets/js/modules/journalModule.js"></script>
-    <script src="assets/js/modules/homeModule.js"></script>
-    <script src="assets/js/modules/manualAnalyzer.js"></script>
-    <script src="assets/js/modules/quickAnalyzer.js"></script>
-    <script src="assets/js/modules/aiModule.js"></script>
-    <script src="assets/js/modules/dojoSimulator.js"></script>
-    <script src="assets/js/modules/guideModule.js"></script>
-    <script src="assets/js/modules/footerEnhancements.js"></script>
-
-    <!-- Phase 1: Psychological Frameworks Library -->
-    <script src="assets/js/modules/conceptLibrary.js"></script>
-    <script src="assets/js/modules/gottmanPatterns.js"></script>
-    <script src="assets/js/modules/couplePatterns.js"></script>
-    <script src="assets/js/modules/attachmentStyles.js"></script>
-
-    <!-- Main App Orchestration -->
-    <script src="assets/js/app.js"></script>
+    <!-- Main Module Loader -->
+    <script type="module" src="assets/js/core/app.js"></script>
 </body>
 
 </html>

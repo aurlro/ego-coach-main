@@ -2,15 +2,16 @@
  * Footer Enhancements - Amélioration des boutons theme et settings
  * Icônes claires, labels, et meilleure accessibilité
  */
+import { getIcon } from '../iconSystem.js';
 
-function initializeFooterEnhancements() {
+export function initializeFooterEnhancements() {
     const themeToggle = document.querySelector('[data-toggle="theme"]') ||
-                        document.querySelector('button[data-action="toggle-theme"]') ||
-                        document.querySelector('.theme-toggle');
+        document.querySelector('button[data-action="toggle-theme"]') ||
+        document.querySelector('.theme-toggle');
 
     const settingsToggle = document.querySelector('[data-toggle="settings"]') ||
-                           document.querySelector('button[data-action="settings"]') ||
-                           document.querySelector('.settings-toggle');
+        document.querySelector('button[data-action="settings"]') ||
+        document.querySelector('.settings-toggle');
 
     // Améliorer le bouton theme si trouvé
     if (themeToggle) {
@@ -95,9 +96,9 @@ function createFooterButtonObserver() {
                 mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === 1) { // Element node
                         const themeBtn = node.querySelector?.('[data-toggle="theme"]') ||
-                                        (node.matches?.('[data-toggle="theme"]') ? node : null);
+                            (node.matches?.('[data-toggle="theme"]') ? node : null);
                         const settingsBtn = node.querySelector?.('[data-toggle="settings"]') ||
-                                           (node.matches?.('[data-toggle="settings"]') ? node : null);
+                            (node.matches?.('[data-toggle="settings"]') ? node : null);
 
                         if (themeBtn) enhanceThemeButton(themeBtn);
                         if (settingsBtn) enhanceSettingsButton(settingsBtn);
@@ -114,11 +115,3 @@ function createFooterButtonObserver() {
         characterData: false
     });
 }
-
-// Initialiser au chargement du document
-document.addEventListener('DOMContentLoaded', () => {
-    // Attendre que les autres modules soient chargés
-    setTimeout(() => {
-        initializeFooterEnhancements();
-    }, 100);
-});

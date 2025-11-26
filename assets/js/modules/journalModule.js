@@ -1,7 +1,8 @@
-'use strict';
+import { escapeHTML } from '../security.js';
+import { copyTextToClipboard } from '../utils.js';
 
 // --- STORE (Logique de données) ---
-function createJournalStore({ dataStore, toast }) {
+export function createJournalStore({ dataStore, toast }) {
     const KEY = 'journal_entries';
 
     function getAll() {
@@ -86,7 +87,7 @@ function createJournalStore({ dataStore, toast }) {
 }
 
 // --- UI MODULE (Interface) ---
-function createJournalModule({ rootId, store, toast, modal, onChange }) {
+export function createJournalModule({ rootId, store, toast, modal, onChange }) {
     const root = document.getElementById(rootId);
     if (!root) {
         console.warn(`Racine journal "${rootId}" introuvable.`);
@@ -114,10 +115,10 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
         // Reset visible count on full render
         state.visibleCount = BATCH_SIZE;
         const entries = store.getAll();
-        
+
         const filteredEntries = state.filter === 'all'
-                ? entries
-                : entries.filter((entry) => entry.egoFocus === state.filter);
+            ? entries
+            : entries.filter((entry) => entry.egoFocus === state.filter);
 
         const visibleEntries = filteredEntries.slice(0, state.visibleCount);
         const remainingCount = filteredEntries.length - state.visibleCount;
@@ -156,12 +157,12 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
 
                 <div class="flex flex-wrap gap-2">
                     ${egoFilters.map((filter) => {
-                        const isActive = state.filter === filter.id;
-                        // Styles conditionnels pour les "Pills"
-                        const activeClass = "bg-blue-600 text-white shadow-md shadow-blue-500/20 border-blue-600";
-                        const inactiveClass = "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400";
-                        
-                        return `
+            const isActive = state.filter === filter.id;
+            // Styles conditionnels pour les "Pills"
+            const activeClass = "bg-blue-600 text-white shadow-md shadow-blue-500/20 border-blue-600";
+            const inactiveClass = "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400";
+
+            return `
                             <button
                                 type="button"
                                 class="px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${isActive ? activeClass : inactiveClass}"
@@ -171,14 +172,14 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
                                 ${filter.label}
                             </button>
                         `;
-                    }).join('')}
+        }).join('')}
                 </div>
 
                 <div id="journal-list" class="space-y-3">
                     ${visibleEntries.length === 0
-                        ? renderEmptyState(entries.length, state.filter) // Correction A & C
-                        : visibleEntries.map(renderEntryCard).join('')
-                    }
+                ? renderEmptyState(entries.length, state.filter) // Correction A & C
+                : visibleEntries.map(renderEntryCard).join('')
+            }
                 </div>
 
                 <div id="journal-footer">
@@ -196,7 +197,7 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
             attachEvents();
             eventsBound = true;
         }
-        
+
         // Important: Recharger les icônes
         if (window.lucide) window.lucide.createIcons();
     }
@@ -211,7 +212,7 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
     function handleAction(event) {
         const button = event.target.closest('[data-action]');
         if (!button) return;
-        
+
         const action = button.getAttribute('data-action');
         const entryId = button.getAttribute('data-entry-id');
 
@@ -253,8 +254,8 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
 
     function loadMoreEntries() {
         const entries = store.getAll();
-        const filteredEntries = state.filter === 'all' 
-            ? entries 
+        const filteredEntries = state.filter === 'all'
+            ? entries
             : entries.filter((entry) => entry.egoFocus === state.filter);
 
         const currentCount = state.visibleCount;
@@ -332,7 +333,7 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
         const dateStr = entry.createdAt ? new Date(entry.createdAt).toLocaleDateString('fr-FR', {
             day: 'numeric', month: 'short'
         }) : 'Date inconnue';
-        
+
         const preview = entry.summary ? entry.summary.split('\n')[0] : 'Pas de résumé disponible.';
 
         return `
@@ -409,8 +410,8 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
         const entry = store.getById(entryId);
         if (!entry) return toast.error('Entrée introuvable.');
 
-        const dateStr = new Date(entry.createdAt).toLocaleDateString('fr-FR', { 
-            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' 
+        const dateStr = new Date(entry.createdAt).toLocaleDateString('fr-FR', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
         });
 
         modal.show({
@@ -445,19 +446,6 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
         });
     }
 
-    // Fonction helper interne si utils.js n'est pas chargé (sécurité)
-    function escapeHTML(str) {
-        if (!str) return '';
-        return str.replace(/[&<>'"]/g, 
-            tag => ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                "'": '&#39;',
-                '"': '&quot;'
-            }[tag]));
-    }
-    
     // Fonctions d'export/import conservées mais simplifiées visuellement
     function handleImport(event) {
         const file = event.target.files?.[0];
@@ -467,8 +455,8 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
             try {
                 const parsed = JSON.parse(reader.result);
                 // Validation basique
-                if(!Array.isArray(parsed)) throw new Error("Format JSON invalide (doit être un tableau)");
-                
+                if (!Array.isArray(parsed)) throw new Error("Format JSON invalide (doit être un tableau)");
+
                 const result = store.importEntries(parsed);
                 if (result.success) {
                     toast.success(`Import: ${result.count} entrées ajoutées.`);
@@ -492,7 +480,7 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `egocoach-journal-${new Date().toISOString().slice(0,10)}.json`;
+        link.download = `egocoach-journal-${new Date().toISOString().slice(0, 10)}.json`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -506,13 +494,13 @@ function createJournalModule({ rootId, store, toast, modal, onChange }) {
                 .catch(() => toast.error('Erreur copie'));
         }
     }
-    
+
     function deleteEntry(entryId) {
-        if(confirm("Supprimer cette entrée ?")) {
-             store.deleteEntry(entryId);
-             toast.success("Entrée supprimée");
-             render();
-             if(onChange) onChange();
+        if (confirm("Supprimer cette entrée ?")) {
+            store.deleteEntry(entryId);
+            toast.success("Entrée supprimée");
+            render();
+            if (onChange) onChange();
         }
     }
 

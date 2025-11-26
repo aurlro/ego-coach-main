@@ -1,36 +1,45 @@
-'use strict';
-
-const STORAGE_KEYS = {
+export const STORAGE_KEYS = {
     theme: 'boite-outils-theme',
     lastPage: 'boite-outils-last-page',
     aiProvider: 'boite-outils-ai-provider', // 'gemini', 'ollama', or 'heuristic'
 };
 
-const GEMINI_STORAGE_KEYS = {
+export const GEMINI_STORAGE_KEYS = {
     encryptedKey: 'gemini.key.v1',
     secret: 'gemini.secret.v1',
     cooldown: 'gemini.cooldown.v1',
 };
 
-const OLLAMA_STORAGE_KEYS = {
+export const OLLAMA_STORAGE_KEYS = {
     endpoint: 'ollama.endpoint.v1',
     model: 'ollama.model.v1',
 };
 
-const GEMINI_ENDPOINT =
+export const GEMINI_ENDPOINT =
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
-const OLLAMA_DEFAULTS = {
+export const OLLAMA_DEFAULTS = {
     endpoint: 'http://localhost:11434',
     model: 'llama3.2',
 };
 
-const COOLDOWN_DEFAULTS = {
+export const COOLDOWN_DEFAULTS = {
     defaultMs: 60000, // 1 minute
     timestampThreshold: 1000000000000, // Unix timestamp in milliseconds threshold
 };
 
-const GEMINI_SYSTEM_PROMPT = `Tu es un Coach & Analyste en communication de crise interpersonnelle.
+// Supabase Configuration
+export const SUPABASE = {
+    URL: 'YOUR_SUPABASE_URL', // Replace with your Supabase URL
+    ANON_KEY: 'YOUR_SUPABASE_ANON_KEY' // Replace with your Supabase Anon Key
+};
+
+// System Prompts
+export const PROMPTS = {
+    // Add specific prompts here if needed
+};
+
+export const GEMINI_SYSTEM_PROMPT = `Tu es un Coach & Analyste en communication de crise interpersonnelle.
 Ton utilisateur est un homme de 25-35 ans, vivant en ville, travaillant dans la gestion de projet informatique, sans enfant à lui mais aime s'occuper des enfants des autres.
 Ton rôle :
 1. Valider l'émotion exprimée.

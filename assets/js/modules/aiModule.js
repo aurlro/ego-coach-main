@@ -1,6 +1,10 @@
-'use strict';
+import { STORAGE_KEYS, OLLAMA_DEFAULTS } from '../config.js';
+import { formatCountdown, autoResizeTextarea, runLocalHeuristics } from '../utils.js';
+import { escapeHTML } from '../security.js';
+import { validateResponse, formatValidationIssues } from '../qualityGuards.js';
+import { refreshIcons } from '../iconSystem.js';
 
-function createAIModule({ rootId, toast, gemini, ollama, modal }) {
+export function createAIModule({ rootId, toast, gemini, ollama, modal }) {
     const root = document.getElementById(rootId);
     if (!root) {
         console.warn(`Racine IA "${rootId}" introuvable.`);

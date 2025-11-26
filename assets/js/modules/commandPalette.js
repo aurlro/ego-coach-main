@@ -2,8 +2,9 @@
  * Command Palette - Recherche et actions rapides (⌘K)
  * Inspiré par Linear et Vercel
  */
+import { escapeHTML } from '../security.js';
 
-function createCommandPalette({ navigation, toast }) {
+export function createCommandPalette({ navigation, toast }) {
     const palette = document.getElementById('command-palette');
     const input = document.getElementById('command-input');
     const results = document.getElementById('command-results');

@@ -2,13 +2,25 @@
  * Dojo Simulator - Interactive Training for Ego-Aware Communication
  * Simulates real scenarios and provides immediate feedback
  */
+import { escapeHTML } from '../security.js';
 
-function createDojoSimulator({ modal, toast }) {
+export function createDojoSimulator({ modal, toast }) {
     let currentScenario = null;
     let scenarioProgress = {
         completed: [],
         scores: {},
     };
+
+    function getKeyLearning(egoName) {
+        const learnings = {
+            'La Défensive': 'La défensive est un bouclier qui empêche la croissance. Baisser le bouclier demande du courage, mais c\'est là que l\'apprentissage commence.',
+            'Le Sauveur': 'Aider sans permission peut être une forme de contrôle. La véritable aide commence par l\'écoute et le respect de l\'autonomie de l\'autre.',
+            'Le Martyr': 'Le sacrifice silencieux ne crée pas de connexion, il crée de la dette. Exprimer ses besoins clairement est un acte de respect envers soi et les autres.',
+            'Le Dernier Mot': 'Avoir raison est moins important qu\'être en relation. La vérité est souvent partagée, pas possédée.',
+            'Le Refus d\'influence': 'Accepter l\'influence n\'est pas se soumettre, c\'est s\'ouvrir. La rigidité casse, la souplesse connecte.'
+        };
+        return learnings[egoName] || 'Chaque interaction est une opportunité de choisir la conscience plutôt que l\'automatisme.';
+    }
 
     const SCENARIOS = [
         {
@@ -655,16 +667,16 @@ function createDojoSimulator({ modal, toast }) {
                         ✨ Réponses plus alignées (sans ego) :
                     </h4>
                     ${betterResponses
-                        .map(
-                            (resp, idx) => `
+                .map(
+                    (resp, idx) => `
                         <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
                             <div class="flex justify-between items-start gap-2 mb-2">
                                 <p class="text-sm font-bold text-green-900 dark:text-green-100">
                                     Option ${idx + 1} (Score: ${resp.score}/100)
                                 </p>
                                 <span class="text-lg">${Array(Math.floor(resp.score / 20))
-                                    .fill('⭐')
-                                    .join('')}</span>
+                            .fill('⭐')
+                            .join('')}</span>
                             </div>
                             <p class="italic text-green-800 dark:text-green-200 mb-2">
                                 "${resp.response}"
@@ -674,8 +686,8 @@ function createDojoSimulator({ modal, toast }) {
                             </p>
                         </div>
                     `,
-                        )
-                        .join('')}
+                )
+                .join('')}
                 </div>
 
                 <!-- Key Learning -->
@@ -800,77 +812,34 @@ function createDojoSimulator({ modal, toast }) {
                         Chaque ego a été rencontré. Ton cerveau a maintenant de nouveaux patterns à utiliser.
                     </p>
                 </div>
-
-                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                    <p class="font-bold text-blue-900 dark:text-blue-100 mb-2">💡 Prochaines étapes :</p>
-                    <ul class="space-y-1 text-sm text-blue-800 dark:text-blue-200">
-                        <li>✓ Réfléchis aux scénarios de ta vie réelle</li>
-                        <li>✓ Prépare tes réponses AVANT les situations stressantes</li>
-                        <li>✓ Reviens au Dojo si tu as besoin d'un refresh</li>
-                        <li>✓ Enregistre tes analyses dans le journal</li>
-                    </ul>
+                
+                <div class="text-center mt-4">
+                     <button id="dojo-restart-btn" class="btn btn-primary">Recommencer</button>
                 </div>
             </div>
         `;
 
         modal.show({
             targetId: 'dojo-modal',
-            title: '🏁 Bravo !',
+            title: '🎉 Félicitations !',
             html,
             actions: [
-                {
-                    label: 'Recommencer le Dojo',
-                    variant: 'primary',
-                    onClick: () => showDojoMenu(),
-                },
                 {
                     label: 'Fermer',
                     onClick: () => modal.hide('dojo-modal'),
                 },
             ],
         });
+
+        setTimeout(() => {
+            document.getElementById('dojo-restart-btn')?.addEventListener('click', () => {
+                showDojoMenu();
+            });
+        }, 100);
     }
 
-    /**
-     * Retourne un apprentissage clé par ego ou pattern
-     */
-    function getKeyLearning(egoOrPattern) {
-        const learnings = {
-            // Individual egos
-            'La Défensive':
-                'Quand tu te défends, tu bloques l\'écoute. Plutôt : accepte le feedback d\'abord, puis demande clarification.',
-            'Le Sauveur':
-                'Donner des solutions avant d\'écouter, c\'est ignorer le vrai besoin. D\'abord valider, ensuite co-construire.',
-            'Le Martyr':
-                'Se sacrifier n\'est pas vertu - c\'est controlant. Traite chaque sujet indépendamment, sans comptabilité.',
-            'Le Dernier Mot':
-                'Gagner le débat perd la relation. Curiosité avant conviction. Comprendre avant convaincre.',
-            "Refus d'influence":
-                'Rejeter tout conseil crée l\'isolement. Respecte ta décision ET la sagesse des autres. C\'est possible.',
-            // Couple patterns
-            'Poursuite-Retrait':
-                'Poursuite = peur du rejet. Retrait = peur de l\'intimité. Poursuite intensifiée détruit tout. Pause + invitation douce = seul solution.',
-            'Boucle Critique-Défense':
-                'La critique attaque CHARACTER. La plainte doux attaque LE PROBLÈME. Une tue la relation. L\'autre peut être résolue.',
-            'Partenaire Indifférent':
-                'Dismissal est de la peur. Escalade de poursuite crée plus de peur. Seule communication calme et douce peut ouvrir la porte.',
-            'Retrait Émotionnel':
-                'Stonewalling n\'est pas rejet. C\'est OVERWHELM. Attaquer le shutdown = créer du shutdown chronique. Respecter le break = la seule way.',
-            'Déséquilibre de Pouvoir':
-                'Pouvoir seul = contrôle = resentment. Pouvoir partagé = partenariat. Partnership requiert que les deux voix comptent.',
-            'Choc Attachement':
-                'Attachement anxieux interprète l\'indépendance comme rejet. Mais c\'est pas rejet. C\'est besoin. Respecter les deux = partnership.',
-            'Mépris (Le Cavalier Dangereux)':
-                'Contempt est le plus destructeur. Il tue le respect. Si chronique, sans thérapie, très difficile à réparer. Si rare, on peut parler.',
-            'Tentatives de Réparation':
-                'Repair attempts matter MORE que le conflit lui-même. Ils peuvent être maladroits. Accepter + guider vers une meilleure réparation = sauvé.',
-        };
-        return learnings[egoOrPattern] || 'Continue à pratiquer !';
-    }
-
-    // Public API
     return {
-        open: showDojoMenu,
+        showDojoMenu,
         startScenario,
     };
 }

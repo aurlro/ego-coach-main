@@ -1,6 +1,8 @@
-'use strict';
+import { GEMINI_STORAGE_KEYS, GEMINI_SYSTEM_PROMPT, GEMINI_ENDPOINT, COOLDOWN_DEFAULTS } from '../config.js';
+import { createError, readQuotaHeaders } from '../utils.js';
+import { sanitizePrompt } from '../security.js';
 
-function createGeminiService({ encryptor, toast }) {
+export function createGeminiService({ encryptor, toast }) {
     let cachedPayload;
     const listeners = new Set();
 

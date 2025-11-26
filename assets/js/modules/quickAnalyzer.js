@@ -2,12 +2,15 @@
  * Quick Analyzer - Mode d'analyse express
  * Interface minimaliste pour analyser rapidement une situation
  */
+import { STORAGE_KEYS } from '../config.js';
+import { autoResizeTextarea, copyTextToClipboard, runLocalHeuristics } from '../utils.js';
+import { escapeHTML } from '../security.js';
 
-function createQuickAnalyzer({ rootId, store, toast, gemini, ollama, modal }) {
+export function createQuickAnalyzer({ rootId, store, toast, gemini, ollama, modal }) {
     const root = document.getElementById(rootId);
     if (!root) {
         console.warn(`Racine Quick Analyzer "${rootId}" introuvable`);
-        return { render: () => {} };
+        return { render: () => { } };
     }
 
     const state = {
@@ -76,40 +79,7 @@ function createQuickAnalyzer({ rootId, store, toast, gemini, ollama, modal }) {
             textarea.addEventListener('input', () => autoResizeTextarea(textarea));
         }
 
-        if (analyzeBtn) {
-            analyzeBtn.addEventListener('click', async (event) => {
-                // 1. Bloque tout rechargement intempestif
-                event.preventDefault();
-                event.stopPropagation(); 
-
-                console.log("🚀 Clic détecté ! Lancement de l'analyse...");
-
-                // Ajout d'un feedback visuel immédiat
-                const originalText = analyzeBtn.innerText;
-                analyzeBtn.innerText = "Analyse en cours...";
-                analyzeBtn.disabled = true;
-
-                try {
-                    await analyze(textarea.value);
-                    console.log("✅ Analyse terminée avec succès");
-                } catch (error) {
-                    console.error("❌ Erreur durant l'analyse:", error);
-                    // alert("Erreur technique : " + error.message); // Using toast instead as per existing app style
-                    toast.error("Erreur technique : " + error.message);
-                } finally {
-                    // Remet le bouton à l'état normal quoi qu'il arrive
-                    // Note: analyze() function also handles this, but we ensure it here too if needed
-                    // But analyze() does it better with icons. 
-                    // We will let analyze() handle the reset to avoid conflict/flicker, 
-                    // OR we just rely on analyze() for the logic and this listener for the event handling.
-                    // The user asked to put the logic IN the listener.
-                    // But analyze() is a separate function.
-                    // I will call analyze() and let it handle the UI updates to keep consistency with the rest of the module (icons etc).
-                    // BUT I must ensure preventDefault is called.
-                }
-            });
-        }
-
+        analyzeBtn?.addEventListener('click', () => analyze(textarea.value));
         clearBtn?.addEventListener('click', () => {
             textarea.value = '';
             autoResizeTextarea(textarea);
@@ -146,6 +116,9 @@ function createQuickAnalyzer({ rootId, store, toast, gemini, ollama, modal }) {
         }
 
         const provider = getAIProvider();
+
+        // Artificial delay to ensure loading state is visible and interaction feels substantial
+        await new Promise(resolve => setTimeout(resolve, 600));
 
         try {
             let result;
@@ -210,7 +183,7 @@ function createQuickAnalyzer({ rootId, store, toast, gemini, ollama, modal }) {
                 insights: result.takeaways || [],
                 source: result.source || 'heuristic',
             };
-            store.addEntry(entry);
+            store.saveEntry(entry);
         } catch (error) {
             console.debug('Sauvegarde auto échouée:', error);
         }
@@ -291,9 +264,13 @@ function createQuickAnalyzer({ rootId, store, toast, gemini, ollama, modal }) {
 
         root.querySelector('#quick-copy-btn')?.addEventListener('click', () => {
             const text = result.options?.map(o => `${o.objective}: "${o.script}"`).join('\n\n') || '';
-            copyTextToClipboard(text).then(() => {
-                toast.success('Copié dans le presse-papiers');
-            });
+            copyTextToClipboard(text)
+                .then(() => {
+                    toast.success('Copié dans le presse-papiers');
+                })
+                .catch(() => {
+                    toast.error('Erreur lors de la copie');
+                });
         });
     }
 

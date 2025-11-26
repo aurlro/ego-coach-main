@@ -1,15 +1,4 @@
-'use strict';
-
-/**
- * Crée un data store pour gérer les données de l'application.
- * Pour l'instant, il utilise le localStorage du navigateur, mais il est conçu
- * pour être facilement adaptable à une base de données distante.
- *
- * @param {object} options - Les options de configuration.
- * @param {string} options.defaultUser - L'utilisateur par défaut si aucun n'est défini.
- * @returns {object} L'instance du data store.
- */
-function createDataStore({ defaultUser = 'default' } = {}) {
+export function createDataStore({ defaultUser = 'default' } = {}) {
     let currentUser = defaultUser;
 
     /**

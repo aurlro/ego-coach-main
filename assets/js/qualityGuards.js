@@ -6,7 +6,7 @@
 /**
  * Vérifie la validité générale d'une réponse
  */
-function isValidResponse(response) {
+export function isValidResponse(response) {
     if (!response || typeof response !== 'object') return false;
 
     // Vérifier qu'il y a du contenu
@@ -20,7 +20,7 @@ function isValidResponse(response) {
  * Détecte si la réponse est pertinente (pas une réponse automatique/vide)
  * Compare avec patterns de réponses génériques
  */
-function isRelevantResponse(response, originalPrompt) {
+export function isRelevantResponse(response, originalPrompt) {
     if (!isValidResponse(response)) return false;
 
     // Patterns de réponses non pertinentes/génériques
@@ -69,7 +69,7 @@ function isRelevantResponse(response, originalPrompt) {
 /**
  * Calcule un score de qualité (0-100) pour une réponse
  */
-function calculateQualityScore(response, originalPrompt) {
+export function calculateQualityScore(response, originalPrompt) {
     let score = 0;
 
     // Validité de base (+20)
@@ -97,21 +97,21 @@ function calculateQualityScore(response, originalPrompt) {
 /**
  * Vérifie que les options proposées ont du contenu pertinent
  */
-function validateOptions(options) {
+export function validateOptions(options) {
     if (!Array.isArray(options)) return false;
 
     return options.every(opt => {
         return opt.objective &&
-               opt.objective.trim().length > 5 &&
-               opt.script &&
-               opt.script.trim().length > 10;
+            opt.objective.trim().length > 5 &&
+            opt.script &&
+            opt.script.trim().length > 10;
     });
 }
 
 /**
  * Détecte si la réponse provient vraiment d'une IA (pas un mock/erreur)
  */
-function isAIGenerated(response) {
+export function isAIGenerated(response) {
     // Les vraies réponses IA ont une structure complexe et variable
     const hasComplexStructure =
         response.takeaways?.some(t => t.length > 30) &&
@@ -134,7 +134,7 @@ function isAIGenerated(response) {
  * Effectue une vérification complète d'une réponse
  * Retourne {valid, score, issues, confidence}
  */
-function validateResponse(response, originalPrompt = '') {
+export function validateResponse(response, originalPrompt = '') {
     const issues = [];
 
     // Vérifications basiques
@@ -201,7 +201,7 @@ function validateResponse(response, originalPrompt = '') {
 /**
  * Formatte les problèmes pour l'utilisateur
  */
-function formatValidationIssues(validation) {
+export function formatValidationIssues(validation) {
     if (validation.valid) {
         return {
             icon: '✓',
@@ -237,7 +237,7 @@ function formatValidationIssues(validation) {
 /**
  * Vérifie la santé générale du système
  */
-function performHealthCheck() {
+export function performHealthCheck() {
     const checks = {
         geminiConfigured: false,
         ollamaAvailable: false,
@@ -277,7 +277,7 @@ function performHealthCheck() {
 /**
  * Génère un rapport d'état du système
  */
-function getSystemHealthStatus() {
+export function getSystemHealthStatus() {
     const checks = performHealthCheck();
 
     let status = 'healthy';

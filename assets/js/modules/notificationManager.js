@@ -3,7 +3,7 @@
  * Centralise la logique des notifications avec persistence locale
  */
 
-function createNotificationManager() {
+export function createNotificationManager() {
     const STORAGE_KEY = 'boite-outils-notifications';
     let notifications = [];
 

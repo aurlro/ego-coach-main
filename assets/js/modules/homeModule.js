@@ -1,6 +1,6 @@
-'use strict';
+import { escapeHTML } from '../security.js';
 
-function createHomeModule({ rootId, store, toast, navigate }) {
+export function createHomeModule({ rootId, store, toast, navigate }) {
     const root = document.getElementById(rootId);
 
     // Sécurité : on vérifie si la racine existe
@@ -17,8 +17,9 @@ function createHomeModule({ rootId, store, toast, navigate }) {
         const entries = store.getAll();
 
         // Sécurité si calculateJournalStats n'est pas encore chargé
-        const stats = (typeof calculateJournalStats === 'function')
-            ? calculateJournalStats(entries)
+        // Stats calculation logic will be moved to statsService
+        const stats = (typeof window.calculateJournalStats === 'function')
+            ? window.calculateJournalStats(entries)
             : { totalEntries: entries.length, topEgo: '—', daysSinceDefensive: 0, latestEntries: [] };
 
         // 2. Construction du HTML
@@ -199,17 +200,6 @@ function createHomeModule({ rootId, store, toast, navigate }) {
         return lastParagraph || 'Analyse enregistrée.';
     }
 
-    // Helper pour sécuriser l'affichage HTML
-    function escapeHTML(str) {
-        if (!str) return '';
-        return str
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
     // --- CORRECTION D : Gestionnaire d'événements unifié ---
     function attachGlobalEvents() {
         root.addEventListener('click', (event) => {
@@ -224,7 +214,6 @@ function createHomeModule({ rootId, store, toast, navigate }) {
             const navTrigger = event.target.closest('[data-navigate]');
             if (navTrigger) {
                 const page = navTrigger.getAttribute('data-navigate');
-                console.log('Navigation demandée vers :', page); // Debug
                 if (page && navigate) {
                     navigate(page);
                 }

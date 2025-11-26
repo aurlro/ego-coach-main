@@ -1,8 +1,8 @@
-'use strict';
+import { COOLDOWN_DEFAULTS } from './config.js';
 
 // --- Error Handling ---
 
-function createError(code, message, extra = {}) {
+export function createError(code, message, extra = {}) {
     const error = new Error(message);
     error.code = code;
     Object.assign(error, extra);
@@ -11,7 +11,7 @@ function createError(code, message, extra = {}) {
 
 // --- Formatting & UI Helpers ---
 
-function formatCountdown(timestamp) {
+export function formatCountdown(timestamp) {
     const diff = Math.max(0, timestamp - Date.now());
     const seconds = Math.round(diff / 1000);
     if (seconds <= 1) return 'dans 1 seconde';
@@ -24,13 +24,13 @@ function formatCountdown(timestamp) {
     return `dans ${days} j`;
 }
 
-function autoResizeTextarea(textarea) {
+export function autoResizeTextarea(textarea) {
     if (!textarea) return;
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
 }
 
-function copyTextToClipboard(text) {
+export function copyTextToClipboard(text) {
     const value = text ?? '';
     if (!value) {
         return Promise.reject(new Error('Texte vide'));
@@ -64,7 +64,7 @@ function copyTextToClipboard(text) {
 
 // --- Date Formatting ---
 
-function formatDateShort(date) {
+export function formatDateShort(date) {
     const d = new Date(date);
     if (Number.isNaN(d.getTime())) return 'Date inconnue';
     return d.toLocaleDateString('fr-FR', {
@@ -74,7 +74,7 @@ function formatDateShort(date) {
     });
 }
 
-function formatRelativeTime(date) {
+export function formatRelativeTime(date) {
     const d = new Date(date);
     if (Number.isNaN(d.getTime())) return 'Date inconnue';
     const diffMs = Date.now() - d.getTime();
@@ -88,7 +88,7 @@ function formatRelativeTime(date) {
     return formatDateShort(d);
 }
 
-function formatFullDate(date) {
+export function formatFullDate(date) {
     const d = new Date(date);
     if (Number.isNaN(d.getTime())) return 'Date inconnue';
     return d.toLocaleString('fr-FR', {
@@ -102,7 +102,7 @@ function formatFullDate(date) {
 
 // --- Encoding ---
 
-function toBase64(buffer) {
+export function toBase64(buffer) {
     const uint8Array = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     let binary = '';
     uint8Array.forEach((byte) => {
@@ -111,7 +111,7 @@ function toBase64(buffer) {
     return btoa(binary);
 }
 
-function fromBase64(value) {
+export function fromBase64(value) {
     const binary = atob(value);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i += 1) {
@@ -122,7 +122,7 @@ function fromBase64(value) {
 
 // --- Domain Logic Helpers ---
 
-function readQuotaHeaders(headers) {
+export function readQuotaHeaders(headers) {
     if (!headers?.get) return null;
     const limitHeader = headers.get('x-ratelimit-limit');
     const remainingHeader = headers.get('x-ratelimit-remaining');
@@ -149,7 +149,7 @@ function readQuotaHeaders(headers) {
     };
 }
 
-function calculateJournalStats(entries) {
+export function calculateJournalStats(entries) {
     const totalEntries = entries.length;
     const lastEntry = entries[0] || null;
     const egoCounts = entries.reduce((map, entry) => {
@@ -192,7 +192,7 @@ function calculateJournalStats(entries) {
     };
 }
 
-function runLocalHeuristics(text) {
+export function runLocalHeuristics(text) {
     const lower = text.toLowerCase();
     const tensionIndicators = ['tu ne', 'toujours', 'encore', 'pourquoi', 'fais'];
     const validationNeed = ['écoute', 'compris', 'soutiens', 'présent', 'merci'];

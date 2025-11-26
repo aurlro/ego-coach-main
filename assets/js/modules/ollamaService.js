@@ -1,6 +1,7 @@
-'use strict';
+import { OLLAMA_STORAGE_KEYS, OLLAMA_DEFAULTS, GEMINI_SYSTEM_PROMPT } from '../config.js';
+import { sanitizePrompt } from '../security.js';
 
-function createOllamaService({ toast }) {
+export function createOllamaService({ toast }) {
     function getConfig() {
         try {
             const endpoint = localStorage.getItem(OLLAMA_STORAGE_KEYS.endpoint) || OLLAMA_DEFAULTS.endpoint;

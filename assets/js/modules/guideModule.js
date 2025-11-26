@@ -1,6 +1,6 @@
-'use strict';
+import { escapeHTML } from '../security.js';
 
-function createGuideModule({ rootId, toast, dojo, modal }) {
+export function createGuideModule({ rootId, toast, dojo, modal }) {
     const root = document.getElementById(rootId);
     if (!root) {
         console.warn(`Racine guide "${rootId}" introuvable.`);

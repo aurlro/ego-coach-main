@@ -8,7 +8,7 @@
  * @param {string} text - Texte à échapper
  * @returns {string} - Texte échappé
  */
-function escapeHTML(text) {
+export function escapeHTML(text) {
     if (typeof text !== 'string') {
         return '';
     }
@@ -22,7 +22,7 @@ function escapeHTML(text) {
  * @param {string} text - Texte à afficher
  * @returns {Text} - Text node sécurisé
  */
-function createSafeTextNode(text) {
+export function createSafeTextNode(text) {
     return document.createTextNode(typeof text === 'string' ? text : '');
 }
 
@@ -31,7 +31,7 @@ function createSafeTextNode(text) {
  * @param {any} data - Données à valider
  * @returns {Object|Array} - Données validées ou null
  */
-function validateImportedData(data) {
+export function validateImportedData(data) {
     if (!Array.isArray(data)) {
         throw new Error('Format JSON invalide : doit être un tableau');
     }
@@ -108,7 +108,7 @@ function validateImportedData(data) {
  * @param {string} date - Date à valider
  * @returns {boolean}
  */
-function isValidISO8601(date) {
+export function isValidISO8601(date) {
     if (typeof date !== 'string') return false;
     const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z?$/;
     if (!iso8601Regex.test(date)) return false;
@@ -122,7 +122,7 @@ function isValidISO8601(date) {
  * @param {string} prompt - Prompt utilisateur
  * @returns {string} - Prompt nettoyé
  */
-function sanitizePrompt(prompt) {
+export function sanitizePrompt(prompt) {
     if (typeof prompt !== 'string') {
         throw new Error('Prompt doit être une chaîne');
     }
@@ -152,7 +152,7 @@ function sanitizePrompt(prompt) {
  * @param {string} key - Clé API
  * @returns {boolean}
  */
-function isValidGeminiKey(key) {
+export function isValidGeminiKey(key) {
     if (typeof key !== 'string') return false;
     // Gemini API keys start with AIza
     return /^AIza[0-9A-Za-z_-]{35}$/.test(key.trim());
@@ -164,7 +164,7 @@ function isValidGeminiKey(key) {
  * @param {Object} options - Options {className, textContent, dataset, ...}
  * @returns {HTMLElement}
  */
-function createSafeElement(tagName, options = {}) {
+export function createSafeElement(tagName, options = {}) {
     const element = document.createElement(tagName);
 
     // Ajouter les classes
@@ -209,7 +209,7 @@ function createSafeElement(tagName, options = {}) {
  * @param {string} apiKey - Clé API
  * @returns {boolean}
  */
-function isValidAPIKey(apiKey) {
+export function isValidAPIKey(apiKey) {
     if (typeof apiKey !== 'string') return false;
     // Aucun caractère de contrôle, newlines, tabs
     return !/[\x00-\x1F\x7F]|\n|\r|\t/.test(apiKey);
@@ -219,7 +219,7 @@ function isValidAPIKey(apiKey) {
  * Rate limiting côté client
  * Prévient les attaques par brute force
  */
-class RateLimiter {
+export class RateLimiter {
     constructor(maxRequests = 10, windowMs = 60000) {
         this.maxRequests = maxRequests;
         this.windowMs = windowMs;
@@ -249,7 +249,7 @@ class RateLimiter {
  * Content Security Policy - Défend contre les injections
  * À utiliser dans le header HTTP idéalement
  */
-function getCSPHeader() {
+export function getCSPHeader() {
     return [
         "default-src 'self'",
         "script-src 'self' https://cdn.tailwindcss.com",
@@ -267,7 +267,7 @@ function getCSPHeader() {
 /**
  * Valide l'intégrité d'une réponse Gemini
  */
-function validateGeminiResponse(response) {
+export function validateGeminiResponse(response) {
     if (typeof response !== 'object' || response === null) {
         throw new Error('Réponse invalide');
     }
@@ -288,7 +288,7 @@ function validateGeminiResponse(response) {
 /**
  * Logs sécurisés - sans données sensibles
  */
-class SecureLogger {
+export class SecureLogger {
     static log(level, message, data = {}) {
         const timestamp = new Date().toISOString();
         const sanitizedData = { ...data };

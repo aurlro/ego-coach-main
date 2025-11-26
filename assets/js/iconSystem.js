@@ -3,7 +3,7 @@
  * Wrapper autour de la bibliothèque Lucide Icons
  */
 
-const ICON_MAPPING = {
+export const ICON_MAPPING = {
     // Navigation & Actions
     home: 'layout-dashboard',
     journal: 'book',
@@ -70,7 +70,7 @@ const ICON_MAPPING = {
  * @param {object} options - Options {size, class}
  * @returns {string} HTML string (<i data-lucide="..."></i>)
  */
-function getIcon(iconKey, options = {}) {
+export function getIcon(iconKey, options = {}) {
     const lucideName = ICON_MAPPING[iconKey] || iconKey; // Fallback to key if not mapped
 
     let className = options.class || '';
@@ -79,11 +79,11 @@ function getIcon(iconKey, options = {}) {
     if (options.size) {
         // Si c'est juste un chiffre, on convertit en classes Tailwind
         if (!isNaN(options.size)) {
-             className += ` w-${options.size} h-${options.size}`;
+            className += ` w-${options.size} h-${options.size}`;
         } else {
-             // Sinon on ajoute tel quel (ex: "w-6 h-6")
-             // Mais attention, l'ancien système faisait un replace regex.
-             // Ici on concatène.
+            // Sinon on ajoute tel quel (ex: "w-6 h-6")
+            // Mais attention, l'ancien système faisait un replace regex.
+            // Ici on concatène.
         }
     }
 
@@ -100,7 +100,7 @@ function getIcon(iconKey, options = {}) {
 /**
  * Crée un élément d'icône avec options
  */
-function createIconElement(iconKey, options = {}) {
+export function createIconElement(iconKey, options = {}) {
     const div = document.createElement('span');
     div.innerHTML = getIcon(iconKey, options);
     if (options.containerClass) {
@@ -114,7 +114,7 @@ function createIconElement(iconKey, options = {}) {
 /**
  * Rafraîchit les icônes Lucide dans toute la page ou un conteneur spécifique
  */
-function refreshIcons(root = document) {
+export function refreshIcons(root = document) {
     if (window.lucide) {
         window.lucide.createIcons({
             root: root,
@@ -128,7 +128,7 @@ function refreshIcons(root = document) {
 /**
  * Retourne l'icône appropriée pour un ego
  */
-function getEgoIcon(egoType) {
+export function getEgoIcon(egoType) {
     const egoIcons = {
         'La Défensive': 'ego_defensive',
         'Le Sauveur': 'ego_savior',
@@ -144,7 +144,7 @@ function getEgoIcon(egoType) {
 /**
  * Retourne l'icône pour un provider IA
  */
-function getProviderIcon(provider) {
+export function getProviderIcon(provider) {
     const icons = {
         'gemini': 'gemini',
         'ollama': 'ollama',
@@ -158,7 +158,7 @@ function getProviderIcon(provider) {
 /**
  * Retourne l'icône de statut
  */
-function getStatusIcon(status) {
+export function getStatusIcon(status) {
     const icons = {
         'success': 'success',
         'error': 'error',
@@ -169,6 +169,3 @@ function getStatusIcon(status) {
 
     return icons[status] || 'info';
 }
-
-// Expose refreshIcons globally so other modules can use it
-window.refreshIcons = refreshIcons;

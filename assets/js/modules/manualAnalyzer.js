@@ -1,6 +1,6 @@
-'use strict';
+import { autoResizeTextarea } from '../utils.js';
 
-function createManualAnalyzer({ rootId, store, toast, onSaved }) {
+export function createManualAnalyzer({ rootId, store, toast, onSaved }) {
     const root = document.getElementById(rootId);
     if (!root) {
         console.warn(`Racine manuelle "${rootId}" introuvable.`);

@@ -1,6 +1,8 @@
-'use strict';
+import { SecureLogger } from '../security.js';
+import { GEMINI_STORAGE_KEYS } from '../config.js';
+import { fromBase64, toBase64 } from '../utils.js';
 
-function createLocalEncryptor() {
+export function createLocalEncryptor() {
     const subtle = window.crypto?.subtle;
     const isSecureContext = window.isSecureContext ?? true;
     const hasSubtle = Boolean(subtle);

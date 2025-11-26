@@ -3,7 +3,7 @@
  * Gère la navigation entre pages et la sidebar
  */
 
-function createNavigationManager() {
+export function createNavigationManager() {
     const pageMap = {
         'home': { id: 'page-home', breadcrumb: 'Tableau de bord', icon: '🏠' },
         'journal': { id: 'page-journal', breadcrumb: 'Mon Journal', icon: '📔' },

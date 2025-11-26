@@ -1,6 +1,4 @@
-'use strict';
-
-function createToastManager(rootId = 'toast-root') {
+export function createToastManager(rootId = 'toast-root') {
     const root = document.getElementById(rootId);
     if (!root) {
         console.warn(`Toast root "${rootId}" introuvable.`);
@@ -84,7 +82,7 @@ function createToastManager(rootId = 'toast-root') {
     };
 }
 
-function createModalManager() {
+export function createModalManager() {
     const active = new Map();
 
     document.addEventListener('click', (event) => {

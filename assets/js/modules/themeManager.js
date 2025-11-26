@@ -2,7 +2,7 @@
  * Theme Manager - Gère le thème clair/sombre
  */
 
-function createThemeManager() {
+export function createThemeManager() {
     const toggleBtn = document.getElementById('theme-toggle');
     const darkIcon = document.getElementById('theme-toggle-dark-icon');
     const lightIcon = document.getElementById('theme-toggle-light-icon');

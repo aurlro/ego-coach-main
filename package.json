@@ -1,0 +1,30 @@
+{
+  "name": "ego-coach-main",
+  "version": "1.0.0",
+  "description": "EgoCoach est une application web locale conçue pour aider les professionnels, en particulier les Product Owners et Business Analysts, à gérer les conflits interpersonnels. L'objectif est de transformer des réactions instinctives en réponses structurées grâce à des outils d'auto-analyse, un tableau de bord de suivi et une assistance par IA, le tout en garantissant une confidentialité totale (aucune donnée n'est envoyée sur un serveur).",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aurlro/ego-coach-main.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/aurlro/ego-coach-main/issues"
+  },
+  "homepage": "https://github.com/aurlro/ego-coach-main#readme",
+  "devDependencies": {
+    "happy-dom": "^20.0.10",
+    "jsdom": "^27.2.0",
+    "vitest": "^4.0.13"
+  }
+}
