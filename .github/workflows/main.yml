@@ -1,0 +1,31 @@
+name: Deploiement FTP O2Switch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        
+        # Chemin absolu fourni
+        server-dir: /home/dore2115/ego-coach.aurelien-rodier.fr/
+        
+        # Sécurité : ne jamais supprimer le dossier .git ou des fichiers de config serveur
+        exclude: |
+          **/.git*
+          **/.git*/**
