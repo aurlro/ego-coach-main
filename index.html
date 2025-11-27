@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EgoCoach Phoenix</title>
     <meta name="description" content="Outil d'analyse et d'aide à la communication interpersonnelle.">
+    <link rel="icon" type="image/png" href="favicon.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -18,6 +19,16 @@
                     }
                 }
             }
+        };
+        // Suppress Tailwind CDN warning in production
+        if (typeof console !== 'undefined' && console.warn) {
+            const originalWarn = console.warn;
+            console.warn = function (...args) {
+                if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+                    return; // Suppress this specific warning
+                }
+                originalWarn.apply(console, args);
+            };
         }
     </script>
 

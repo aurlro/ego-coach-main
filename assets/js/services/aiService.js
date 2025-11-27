@@ -125,6 +125,24 @@ export const aiService = {
             const data = await response.json();
             return data.response;
         } catch (error) {
+            // Detect CORS errors (usually when accessing localhost from remote domain)
+            if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+                const isRemote = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+                if (isRemote) {
+                    throw new Error(
+                        "❌ Ollama n'est accessible que localement. \n\n" +
+                        "Pour utiliser l'IA depuis cette application hébergée :\n" +
+                        "1. Lancez l'app localement (localhost), ou\n" +
+                        "2. Utilisez une autre IA (Gemini/OpenAI dans les paramètres), ou\n" +
+                        "3. Lancez Ollama avec CORS activé : OLLAMA_ORIGINS=* ollama serve"
+                    );
+                }
+                throw new Error(
+                    "Ollama n'est pas accessible. Vérifiez que :\n" +
+                    "1. Ollama est lancé (ex: 'ollama serve')\n" +
+                    "2. Le service tourne sur localhost:11434"
+                );
+            }
             console.error("Ollama Call Error:", error);
             throw error;
         }
@@ -159,6 +177,11 @@ export const aiService = {
             const data = await response.json();
             return data.embedding;
         } catch (error) {
+            // Silently fail for embeddings (CORS or offline)
+            if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+                console.warn("[Embedding] Ollama inaccessible (CORS ou offline). Continuant sans embeddings.");
+                return [];
+            }
             console.warn("[Embedding] Error:", error);
             return [];
         }
@@ -179,7 +202,16 @@ export const aiService = {
                 status.ollama = { status: 'error', message: `Erreur HTTP ${response.status}` };
             }
         } catch (e) {
-            status.ollama = { status: 'offline', message: 'Non détecté (localhost:11434)' };
+            // Check if CORS issue (remote access)
+            const isRemote = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+            if (isRemote && e instanceof TypeError) {
+                status.ollama = { 
+                    status: 'cors', 
+                    message: '⚠️ Ollama non accessible depuis un domaine distant (CORS). Lancez l\'app en local ou utilisez Gemini/OpenAI.' 
+                };
+            } else {
+                status.ollama = { status: 'offline', message: 'Non détecté (localhost:11434). Lancez "ollama serve" si installé.' };
+            }
         }
 
         return status;

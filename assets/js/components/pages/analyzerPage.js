@@ -16,10 +16,16 @@ export class AnalyzerPage {
 
     async mount(container) {
         container.innerHTML = `
-            <div class="w-full max-w-[1600px] px-6 mx-auto py-8">
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Nouvelle Analyse</h1>
-                    <p class="text-slate-600 dark:text-slate-400">Suivez le guide en 5 étapes pour décoder le conflit et trouver la réponse adaptée.</p>
+            <div class="space-y-8">
+                <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+                            Nouvelle Analyse
+                        </h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            Suivez le guide en 5 étapes pour décoder le conflit et trouver la réponse adaptée.
+                        </p>
+                    </div>
                 </div>
                 
                 <div id="wizard-container"></div>

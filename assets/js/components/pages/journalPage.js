@@ -79,15 +79,19 @@ export class JournalPage {
             `;
 
         this.container.innerHTML = `
-            <div class="w-full max-w-[1600px] mx-auto px-6">
-                <div class="flex items-center justify-between mb-8">
+            <div class="space-y-8">
+                <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                     <div>
-                        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Mon Journal</h1>
-                        <p class="text-slate-500 dark:text-slate-400">Historique de vos réflexions et analyses.</p>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+                            Mon Journal
+                        </h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            <span class="font-medium text-slate-900 dark:text-white">${journal.length} analyses</span> sauvegardées.
+                        </p>
                     </div>
-                    <div class="flex gap-2">
-                        <button id="new-entry-btn" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
-                            <i data-lucide="plus" class="w-4 h-4"></i>
+                    <div class="flex gap-3">
+                        <button id="new-entry-btn" class="btn btn-primary btn-sm shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transition-all">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
                             Nouvelle Entrée
                         </button>
                     </div>

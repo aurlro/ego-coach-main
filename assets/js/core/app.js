@@ -98,8 +98,24 @@ class App {
             document.documentElement.classList.toggle('dark', next === 'dark');
             localStorage.setItem('theme', next);
 
-            // Refresh icons after theme change to ensure correct visibility
-            if (window.lucide) window.lucide.createIcons();
+            // Refresh icons and ensure correct visibility
+            if (window.lucide) {
+                window.lucide.createIcons();
+                // Force update icon visibility after lucide recreates icons
+                const darkIcon = document.getElementById('theme-toggle-dark-icon');
+                const lightIcon = document.getElementById('theme-toggle-light-icon');
+                if (next === 'dark') {
+                    darkIcon?.classList.add('hidden');
+                    darkIcon?.classList.remove('block');
+                    lightIcon?.classList.remove('hidden');
+                    lightIcon?.classList.add('block');
+                } else {
+                    darkIcon?.classList.remove('hidden');
+                    darkIcon?.classList.add('block');
+                    lightIcon?.classList.add('hidden');
+                    lightIcon?.classList.remove('block');
+                }
+            }
         });
 
         // Initialize theme from storage

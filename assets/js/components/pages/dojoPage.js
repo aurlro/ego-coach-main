@@ -39,15 +39,17 @@ export class DojoPage {
 
         if (isFinished) {
             this.container.innerHTML = `
-                <div class="max-w-2xl mx-auto text-center p-8 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
-                    <div class="w-20 h-20 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-yellow-600 dark:text-yellow-400">
-                        <i data-lucide="trophy" class="w-10 h-10"></i>
+                <div class="space-y-8">
+                    <div class="max-w-2xl mx-auto text-center p-8 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+                        <div class="w-20 h-20 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-yellow-600 dark:text-yellow-400">
+                            <i data-lucide="trophy" class="w-10 h-10"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Entraînement terminé !</h2>
+                        <p class="text-xl text-slate-600 dark:text-slate-400 mb-8">Score : <span class="font-bold text-blue-600">${this.score}/${this.scenarios.length}</span></p>
+                        <button id="btn-restart" class="btn btn-primary px-6 py-2">
+                            Recommencer
+                        </button>
                     </div>
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Entraînement terminé !</h2>
-                    <p class="text-xl text-slate-600 dark:text-slate-400 mb-8">Score : <span class="font-bold text-blue-600">${this.score}/${this.scenarios.length}</span></p>
-                    <button id="btn-restart" class="btn-primary px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        Recommencer
-                    </button>
                 </div>
             `;
             this.container.querySelector('#btn-restart')?.addEventListener('click', () => {
@@ -60,14 +62,20 @@ export class DojoPage {
         }
 
         this.container.innerHTML = `
-            <div class="max-w-2xl mx-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Dojo : Salle d'entraînement</h1>
-                    <span class="text-sm font-medium text-slate-500">Scénario ${this.currentScenarioIndex + 1}/${this.scenarios.length}</span>
+            <div class="space-y-8">
+                <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+                            Dojo : Salle d'entraînement
+                        </h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            Scénario <span class="font-medium text-slate-900 dark:text-white">${this.currentScenarioIndex + 1}/${this.scenarios.length}</span>
+                        </p>
+                    </div>
                 </div>
 
-                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-                    <div class="p-8 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+                    <div class="p-8 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50">
                         <div class="flex items-center gap-2 mb-4">
                             <span class="px-2 py-1 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 text-xs font-bold rounded uppercase tracking-wide">Adversaire : ${scenario.ego}</span>
                         </div>
@@ -91,7 +99,7 @@ export class DojoPage {
                     </div>
                 </div>
                 
-                <div id="feedback-area" class="mt-6 hidden"></div>
+                <div id="feedback-area" class="hidden"></div>
             </div>
         `;
 
