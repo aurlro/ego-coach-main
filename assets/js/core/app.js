@@ -4,6 +4,8 @@ import { repository } from '../data/repository.js';
 import { bus } from './eventBus.js';
 import { SettingsModal } from '../components/settingsModal.js';
 import { OnboardingModal } from '../components/modals/onboardingModal.js';
+import { keyboardShortcuts } from './keyboardShortcuts.js';
+import { pwaInstaller } from './pwaInstaller.js';
 
 // Import Pages (will be created later)
 // For now we'll use placeholders or dynamic imports in the router config
@@ -86,7 +88,43 @@ class App {
         // 3. Global Event Listeners
         this.attachGlobalListeners();
 
+        // 4. Initialize Keyboard Shortcuts
+        keyboardShortcuts.init();
+
+        // 5. Initialize PWA
+        pwaInstaller.init();
+
+        // 6. Hide splash screen
+        this.hideSplash();
+
         console.log(`✅ App Ready (took ${Math.round(performance.now() - start)}ms)`);
+    }
+
+    hideSplash() {
+        const splash = document.getElementById('splash-screen');
+        if (splash) {
+            // Minimum display time for better UX
+            const minDisplayTime = 500;
+            const elapsed = performance.now();
+            const delay = Math.max(0, minDisplayTime - elapsed);
+
+            setTimeout(() => {
+                splash.classList.add('hidden');
+                // Remove from DOM after transition
+                setTimeout(() => splash.remove(), 300);
+            }, delay);
+        }
+    }
+
+    getAutoTheme() {
+        const autoEnabled = localStorage.getItem('auto_theme') === 'true';
+        if (!autoEnabled) {
+            return localStorage.getItem('theme') || 'light';
+        }
+
+        const hour = new Date().getHours();
+        const isDarkHours = hour >= 19 || hour < 7;
+        return isDarkHours ? 'dark' : 'light';
     }
 
     attachGlobalListeners() {
@@ -118,54 +156,37 @@ class App {
             }
         });
 
-        // Initialize theme from storage
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        // Initialize theme from storage (with auto mode)
+        const savedTheme = this.getAutoTheme();
         store.setState({ theme: savedTheme });
         document.documentElement.classList.toggle('dark', savedTheme === 'dark');
 
-        // Mobile Sidebar Logic
+        // Sidebar toggle
+        const sidebarToggle = document.getElementById('sidebar-toggle');
         const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        const toggleBtn = document.getElementById('sidebar-toggle');
-        const links = document.querySelectorAll('#sidebar a');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-        function toggleSidebar() {
-            const isClosed = sidebar.classList.contains('-translate-x-full');
-            if (isClosed) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-                // Small delay to allow display:block to apply before opacity transition
-                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            } else {
+        sidebarToggle?.addEventListener('click', () => {
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+
+            if (isOpen) {
+                // Close sidebar
                 sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('opacity-0');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
+                sidebarOverlay.classList.add('opacity-0');
+                sidebarOverlay.classList.add('hidden');
+            } else {
+                // Open sidebar
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+                setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10);
             }
-        }
-
-        toggleBtn?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleSidebar();
         });
 
-        overlay?.addEventListener('click', toggleSidebar);
-
-        // Close sidebar on link click (mobile)
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
-                    toggleSidebar();
-                }
-            });
-        });
-
-        // Settings Button Logic
-        const settingsBtn = document.getElementById('open-settings-btn');
-        settingsBtn?.addEventListener('click', () => {
-            this.settingsModal.open();
-            if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
-                toggleSidebar();
-            }
+        // Close sidebar when clicking overlay
+        sidebarOverlay?.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('opacity-0');
+            sidebarOverlay.classList.add('hidden');
         });
 
         // Theme Toggle Button Logic

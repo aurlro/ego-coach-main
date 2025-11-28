@@ -1,0 +1,52 @@
+# Force HTTPS redirect
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
+
+# Security Headers
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "SAMEORIGIN"
+Header set X-XSS-Protection "1; mode=block"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+# PWA Headers
+<FilesMatch "\.(html|htm)$">
+  Header set Cache-Control "no-cache, must-revalidate"
+</FilesMatch>
+
+<FilesMatch "\.(js|css)$">
+  Header set Cache-Control "public, max-age=604800, must-revalidate"
+</FilesMatch>
+
+<FilesMatch "\.(jpg|jpeg|png|gif|svg|webp|ico|woff|woff2|ttf|eot)$">
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# Manifest
+<FilesMatch "manifest\.json">
+  Header set Content-Type "application/manifest+json"
+  Header set Cache-Control "no-cache, must-revalidate"
+</FilesMatch>
+
+# Service Worker
+<FilesMatch "sw\.js">
+  Header set Content-Type "application/javascript; charset=utf-8"
+  Header set Cache-Control "no-cache, no-store, must-revalidate"
+  Header set Service-Worker-Allowed "/"
+</FilesMatch>
+
+# Enable CORS for fonts
+<FilesMatch "\.(woff|woff2|ttf|eot)$">
+  Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+# Compress text files
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/manifest+json
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Custom error pages
+ErrorDocument 404 /404.html

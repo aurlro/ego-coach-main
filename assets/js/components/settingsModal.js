@@ -32,13 +32,31 @@ export class SettingsModal {
                     </div>
                     
                     <div class="p-6 space-y-8 overflow-y-auto custom-scrollbar">
-                        
-                        <!-- Storage Mode -->
+                       <div class="space-y-6">
+                        <!-- Storage Mode Section -->
                         <div class="space-y-4">
                             <h3 class="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-wider">
-                                <i data-lucide="database" class="w-4 h-4 inline mr-1"></i>
-                                Mode de Stockage
+                                <i data-lucide="hard-drive" class="w-4 h-4 inline mr-1"></i>
+                                Stockage
                             </h3>
+                            
+                            <!-- Theme Settings -->
+                            <div class="mb-6 pb-6 border-b border-slate-200 dark:border-slate-700">
+                                <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
+                                    <i data-lucide="moon" class="w-4 h-4"></i>
+                                    Thème
+                                </h4>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="checkbox" id="auto-theme-toggle" class="sr-only peer">
+                                    <div class="relative w-11 h-6 bg-slate-200 dark:bg-slate-700 rounded-full peer peer-checked:bg-blue-600 transition-colors">
+                                        <div class="absolute top-0.5 left-0.5 bg-white w-5 h-5 rounded-full transition-transform peer-checked:translate-x-5"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-medium text-slate-900 dark:text-white">Mode sombre automatique</div>
+                                        <div class="text-xs text-slate-500">Active entre 19h et 7h</div>
+                                    </div>
+                                </label>
+                            </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <label class="cursor-pointer relative">
                                     <input type="radio" name="storage_mode" value="local" class="peer sr-only">
@@ -282,6 +300,41 @@ export class SettingsModal {
                 saveAiBtn.textContent = originalText;
                 saveAiBtn.classList.remove('bg-green-50', 'text-green-600', 'border-green-200');
             }, 2000);
+        });
+
+        // Auto Theme Toggle
+        const autoThemeToggle = document.getElementById('auto-theme-toggle');
+        const currentAutoTheme = localStorage.getItem('auto_theme') === 'true';
+        autoThemeToggle.checked = currentAutoTheme;
+
+        autoThemeToggle.addEventListener('change', (e) => {
+            const enabled = e.target.checked;
+            localStorage.setItem('auto_theme', enabled.toString());
+
+            // Apply theme immediately if auto mode is on
+            if (enabled) {
+                const hour = new Date().getHours();
+                const isDarkHours = hour >= 19 || hour < 7;
+                const newTheme = isDarkHours ? 'dark' : 'light';
+
+                store.setState({ theme: newTheme });
+                localStorage.setItem('theme', newTheme);
+                document.documentElement.classList.toggle('dark', newTheme === 'dark');
+
+                // Refresh icons
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+                    const lightIcon = document.getElementById('theme-toggle-light-icon');
+                    if (newTheme === 'dark') {
+                        darkIcon?.classList.add('hidden');
+                        lightIcon?.classList.remove('hidden');
+                    } else {
+                        darkIcon?.classList.remove('hidden');
+                        lightIcon?.classList.add('hidden');
+                    }
+                }
+            }
         });
 
         // Save Supabase Config

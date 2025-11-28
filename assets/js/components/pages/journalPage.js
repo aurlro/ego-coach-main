@@ -1,6 +1,7 @@
 import { store } from '../../core/store.js';
 import { repository } from '../../data/repository.js';
 import { bus } from '../../core/eventBus.js';
+import { EmptyState } from '../ui/emptyStates.js';
 
 export class JournalPage {
     async mount(container) {
@@ -62,21 +63,7 @@ export class JournalPage {
                 </div>
             `).join('')}
             </div>`
-            : `
-                <div class="flex flex-col items-center justify-center py-16 text-center bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
-                    <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
-                        <i data-lucide="book-open" class="w-8 h-8 text-slate-400"></i>
-                    </div>
-                    <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-1">Journal vide</h3>
-                    <p class="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">
-                        Vous n'avez pas encore enregistré d'analyses. Commencez par analyser une situation.
-                    </p>
-                    <a href="#analyze" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                        <i data-lucide="plus" class="w-4 h-4"></i>
-                        Nouvelle analyse
-                    </a>
-                </div>
-            `;
+            : EmptyState.journal();
 
         this.container.innerHTML = `
             <div class="space-y-8">

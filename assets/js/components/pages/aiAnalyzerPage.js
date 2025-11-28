@@ -27,14 +27,14 @@ export class AIAnalyzerPage {
                         <summary class="cursor-pointer font-medium text-slate-700 dark:text-slate-300">Configuration IA</summary>
                         <div class="mt-4 space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fournisseur</label>
+                                <label for="provider-select" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fournisseur</label>
                                 <select id="provider-select" class="w-full p-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                                     <option value="gemini" ${provider === 'gemini' ? 'selected' : ''}>Google Gemini</option>
                                     <option value="ollama" ${provider === 'ollama' ? 'selected' : ''}>Ollama (Local)</option>
                                 </select>
                             </div>
                             <div id="api-key-container" class="${provider === 'ollama' ? 'hidden' : ''}">
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Clé API Gemini</label>
+                                <label for="api-key-input" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Clé API Gemini</label>
                                 <input type="password" id="api-key-input" value="${apiKey}" class="w-full p-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" placeholder="AIza...">
                             </div>
                             <button id="save-config" class="text-sm text-blue-600 hover:underline">Sauvegarder la configuration</button>
@@ -44,7 +44,7 @@ export class AIAnalyzerPage {
 
                 <!-- Input Area -->
                 <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
-                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Décrivez la situation</label>
+                    <label for="prompt-input" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Décrivez la situation</label>
                     <textarea id="prompt-input" class="w-full h-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border-0 focus:ring-2 focus:ring-blue-500 dark:text-white resize-none" placeholder="Copiez-collez la conversation ou décrivez le conflit..."></textarea>
                     
                     <div class="mt-4 flex justify-end">

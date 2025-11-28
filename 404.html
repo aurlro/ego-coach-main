@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page non trouvée | EgoCoach</title>
+    <meta name="description" content="Cette page n'existe pas ou a été déplacée.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        };
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950">
+    <div class="error-404">
+        <h1>404</h1>
+        <p>Cette page s'est perdue dans l'ego 🌀</p>
+
+        <div class="quick-links">
+            <a href="/#home">
+                <i data-lucide="home" class="w-4 h-4 inline mr-1"></i>
+                Dashboard
+            </a>
+            <a href="/#journal">
+                <i data-lucide="book" class="w-4 h-4 inline mr-1"></i>
+                Journal
+            </a>
+            <a href="/#analyze">
+                <i data-lucide="zap" class="w-4 h-4 inline mr-1"></i>
+                Nouvelle Analyse
+            </a>
+            <a href="/#guide">
+                <i data-lucide="compass" class="w-4 h-4 inline mr-1"></i>
+                Guide
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
