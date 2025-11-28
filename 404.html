@@ -27,30 +27,70 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/animations.css">
 </head>
 
-<body class="bg-slate-50 dark:bg-slate-950">
-    <div class="error-404">
-        <h1>404</h1>
-        <p>Cette page s'est perdue dans l'ego 🌀</p>
+<body
+    class="bg-slate-50 dark:bg-slate-950 min-h-screen flex items-center justify-center p-4 selection:bg-indigo-500/30">
+    <!-- Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div
+            class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-3xl animate-blob">
+        </div>
+        <div
+            class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-3xl animate-blob animation-delay-2000">
+        </div>
+    </div>
 
-        <div class="quick-links">
-            <a href="/#home">
-                <i data-lucide="home" class="w-4 h-4 inline mr-1"></i>
-                Dashboard
+    <div class="error-404 relative z-10 max-w-2xl w-full text-center">
+        <h1
+            class="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mb-2 drop-shadow-sm">
+            404
+        </h1>
+        <p class="text-2xl font-medium text-slate-600 dark:text-slate-400 mb-12">
+            Cette page s'est perdue dans l'ego <span class="inline-block animate-spin-slow">🌀</span>
+        </p>
+
+        <div class="quick-links grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a href="/#home"
+                class="group flex flex-col items-center p-6 rounded-xl bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 dark:hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-300 hover:-translate-y-1">
+                <div
+                    class="p-3 rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 mb-3 group-hover:scale-110 transition-transform">
+                    <i data-lucide="home" class="w-6 h-6"></i>
+                </div>
+                <span class="font-semibold text-slate-700 dark:text-slate-200">Dashboard</span>
+                <span class="text-sm text-slate-500 dark:text-slate-400 mt-1">Retour à l'accueil</span>
             </a>
-            <a href="/#journal">
-                <i data-lucide="book" class="w-4 h-4 inline mr-1"></i>
-                Journal
+
+            <a href="/#journal"
+                class="group flex flex-col items-center p-6 rounded-xl bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-pink-500/50 dark:hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/10 transition-all duration-300 hover:-translate-y-1">
+                <div
+                    class="p-3 rounded-full bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 mb-3 group-hover:scale-110 transition-transform">
+                    <i data-lucide="book" class="w-6 h-6"></i>
+                </div>
+                <span class="font-semibold text-slate-700 dark:text-slate-200">Journal</span>
+                <span class="text-sm text-slate-500 dark:text-slate-400 mt-1">Vos réflexions</span>
             </a>
-            <a href="/#analyze">
-                <i data-lucide="zap" class="w-4 h-4 inline mr-1"></i>
-                Nouvelle Analyse
+
+            <a href="/#analyze"
+                class="group flex flex-col items-center p-6 rounded-xl bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-amber-500/50 dark:hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300 hover:-translate-y-1">
+                <div
+                    class="p-3 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 mb-3 group-hover:scale-110 transition-transform">
+                    <i data-lucide="zap" class="w-6 h-6"></i>
+                </div>
+                <span class="font-semibold text-slate-700 dark:text-slate-200">Nouvelle Analyse</span>
+                <span class="text-sm text-slate-500 dark:text-slate-400 mt-1">Décoder un conflit</span>
             </a>
-            <a href="/#guide">
-                <i data-lucide="compass" class="w-4 h-4 inline mr-1"></i>
-                Guide
+
+            <a href="/#guide"
+                class="group flex flex-col items-center p-6 rounded-xl bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300 hover:-translate-y-1">
+                <div
+                    class="p-3 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 mb-3 group-hover:scale-110 transition-transform">
+                    <i data-lucide="compass" class="w-6 h-6"></i>
+                </div>
+                <span class="font-semibold text-slate-700 dark:text-slate-200">Guide</span>
+                <span class="text-sm text-slate-500 dark:text-slate-400 mt-1">Aide & Ressources</span>
             </a>
         </div>
     </div>
@@ -58,6 +98,32 @@
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
+
+        // Router fallback for 404 links
+        // If user lands directly on this page, hash navigation won't work
+        // This script ensures links work by redirecting to index.html with hash
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('a[href^="/#"]');
+            let routerActive = false;
+
+            // Check if router is active after a delay
+            setTimeout(() => {
+                if (!routerActive) {
+                    links.forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const hash = link.getAttribute('href');
+                            window.location.href = '/index.html' + hash;
+                        });
+                    });
+                }
+            }, 100);
+
+            // If navigation happens via hash, router is active
+            window.addEventListener('hashchange', () => {
+                routerActive = true;
+            });
+        });
     </script>
 </body>
 

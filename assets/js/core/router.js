@@ -66,11 +66,25 @@ export class Router {
         document.querySelectorAll('[data-link]').forEach(link => {
             const href = link.getAttribute('href');
             if (href === `#${hash}`) {
-                link.classList.add('active', 'bg-blue-50', 'text-blue-600', 'dark:bg-blue-900/20', 'dark:text-blue-400');
-                link.classList.remove('text-slate-600', 'dark:text-slate-400');
+                // Active State: Indigo theme
+                link.classList.add('active', 'bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-900/20', 'dark:text-indigo-400', 'font-semibold');
+                link.classList.remove('text-slate-600', 'dark:text-slate-400', 'font-medium');
+
+                // Highlight icon if present
+                const icon = link.querySelector('[data-lucide]');
+                if (icon) {
+                    icon.classList.add('text-indigo-600', 'dark:text-indigo-400');
+                }
             } else {
-                link.classList.remove('active', 'bg-blue-50', 'text-blue-600', 'dark:bg-blue-900/20', 'dark:text-blue-400');
-                link.classList.add('text-slate-600', 'dark:text-slate-400');
+                // Inactive State
+                link.classList.remove('active', 'bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-900/20', 'dark:text-indigo-400', 'font-semibold');
+                link.classList.add('text-slate-600', 'dark:text-slate-400', 'font-medium');
+
+                // Reset icon
+                const icon = link.querySelector('[data-lucide]');
+                if (icon) {
+                    icon.classList.remove('text-indigo-600', 'dark:text-indigo-400');
+                }
             }
         });
     }

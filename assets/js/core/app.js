@@ -167,26 +167,29 @@ class App {
         const sidebarOverlay = document.getElementById('sidebar-overlay');
 
         sidebarToggle?.addEventListener('click', () => {
-            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            const isOpen = sidebar.classList.contains('open');
 
             if (isOpen) {
                 // Close sidebar
-                sidebar.classList.add('-translate-x-full');
-                sidebarOverlay.classList.add('opacity-0');
-                sidebarOverlay.classList.add('hidden');
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('show');
+                setTimeout(() => sidebarOverlay.classList.add('hidden'), 300); // Wait for transition
             } else {
                 // Open sidebar
-                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('open');
                 sidebarOverlay.classList.remove('hidden');
-                setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10);
+                // Small delay to allow display:block to apply before opacity transition
+                requestAnimationFrame(() => {
+                    sidebarOverlay.classList.add('show');
+                });
             }
         });
 
         // Close sidebar when clicking overlay
         sidebarOverlay?.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            sidebarOverlay.classList.add('opacity-0');
-            sidebarOverlay.classList.add('hidden');
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('show');
+            setTimeout(() => sidebarOverlay.classList.add('hidden'), 300);
         });
 
         // Theme Toggle Button Logic
