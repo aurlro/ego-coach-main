@@ -188,7 +188,9 @@ export class OnboardingModal {
                             </p>
                             
                             <div class="space-y-3">
+                                <label for="ob-supabase-url" class="sr-only">URL du projet Supabase</label>
                                 <input type="text" id="ob-supabase-url" placeholder="Project URL (https://...)" class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                                <label for="ob-supabase-key" class="sr-only">Clé API Supabase (Anon Key)</label>
                                 <input type="password" id="ob-supabase-key" placeholder="Anon Key" class="w-full p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                                 <button id="ob-test-connection" class="w-full py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors">
                                     Tester la connexion

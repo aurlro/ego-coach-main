@@ -83,11 +83,11 @@ export class SettingsModal {
                                 <h4 class="text-sm font-medium text-slate-900 dark:text-white mb-3">Configuration Supabase</h4>
                                 <div class="space-y-3">
                                     <div>
-                                        <label class="block text-xs font-medium text-slate-500 mb-1">Project URL</label>
+                                        <label for="supabase-url" class="block text-xs font-medium text-slate-500 mb-1">Project URL</label>
                                         <input type="text" id="supabase-url" class="w-full p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm" placeholder="https://xyz.supabase.co">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-medium text-slate-500 mb-1">Anon Key</label>
+                                        <label for="supabase-key" class="block text-xs font-medium text-slate-500 mb-1">Anon Key</label>
                                         <input type="password" id="supabase-key" class="w-full p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm" placeholder="eyJhbGciOiJIUzI1Ni...">
                                     </div>
                                     <button id="save-connection" class="w-full btn-primary bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 text-sm font-medium transition-colors">
@@ -108,7 +108,7 @@ export class SettingsModal {
                             </h3>
                             
                             <div>
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fournisseur IA</label>
+                                <label for="ai-provider" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fournisseur IA</label>
                                 <select id="ai-provider" class="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white">
                                     <option value="ollama">Ollama (Local / Gratuit)</option>
                                     <option value="gemini">Google Gemini (Clé API)</option>
@@ -117,7 +117,7 @@ export class SettingsModal {
                             </div>
 
                             <div id="ai-key-container" class="hidden">
-                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Clé API</label>
+                                <label for="ai-api-key" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Clé API</label>
                                 <input type="password" id="ai-api-key" class="w-full p-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm" placeholder="sk-...">
                                 <p class="text-xs text-slate-500 mt-1">Votre clé est stockée localement dans votre navigateur.</p>
                             </div>

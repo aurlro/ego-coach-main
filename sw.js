@@ -1,4 +1,4 @@
-const CACHE_NAME = 'egocoach-v1';
+const CACHE_NAME = 'egocoach-v2';
 const RUNTIME_CACHE = 'egocoach-runtime';
 
 // Files to cache on install

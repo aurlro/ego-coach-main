@@ -89,6 +89,10 @@ export const aiService = {
             const data = await response.json();
             return data.models?.map(m => m.name) || [];
         } catch (e) {
+            if (e.name === 'TypeError' && e.message.includes('Failed to fetch')) {
+                // Expected behavior when offline or CORS blocked
+                return [];
+            }
             console.warn("Failed to fetch Ollama models:", e);
             return [];
         }
@@ -205,9 +209,9 @@ export const aiService = {
             // Check if CORS issue (remote access)
             const isRemote = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
             if (isRemote && e instanceof TypeError) {
-                status.ollama = { 
-                    status: 'cors', 
-                    message: '⚠️ Ollama non accessible depuis un domaine distant (CORS). Lancez l\'app en local ou utilisez Gemini/OpenAI.' 
+                status.ollama = {
+                    status: 'cors',
+                    message: '⚠️ Ollama bloqué (CORS). Configurez OLLAMA_ORIGINS="*" ou utilisez l\'app en local.'
                 };
             } else {
                 status.ollama = { status: 'offline', message: 'Non détecté (localhost:11434). Lancez "ollama serve" si installé.' };
